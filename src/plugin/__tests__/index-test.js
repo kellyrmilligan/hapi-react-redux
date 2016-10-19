@@ -131,32 +131,6 @@ describe('hapi react redux plugin', () => {
     })
   })
 
-  it('can use data send to the hapiReactReduxRender method on reply', (done) => {
-    const server = new Hapi.Server()
-    server.connection()
-    server.register(HapiReactRedux, (err) => {
-      options.layout = layout
-      options.routes = clientRoutes
-      server.hapiReactRedux(options)
-      server.route({
-        method: 'GET',
-        path: '/',
-        handler(request, reply) {
-          return reply.hapiReactReduxRender({
-            test: 'the test'
-          })
-        }
-      })
-      server.inject({
-        method: 'GET',
-        url: '/'
-      }, (res) => {
-        expect(res.result).toContain('the test')
-        done()
-      })
-    })
-  })
-
   it('can use data sent to the hapiReactReduxRender method on reply', (done) => {
     const server = new Hapi.Server()
     server.connection()
