@@ -5,41 +5,44 @@ import Iso from 'iso'
 import Hoek from 'hoek'
 import routeResovler from 'route-resolver'
 import Boom from 'boom'
+import { Provider } from 'react-redux'
 
 import UniversalProvider from './universal-provider'
 
-function hapiReactAltPlugin(server, options, next) {
+function hapiReactReduxPlugin(server, options, next) {
 
-  server.decorate('server', 'hapiReactAlt', function(options) {
+  server.decorate('server', 'hapiReactRedux', function(options) {
 
     Hoek.assert(options, 'Missing options')
-    this.realm.plugins.universalReactAlt = this.realm.plugins.universalReactAlt || {}
-    Hoek.assert(!this.realm.plugins.universalReactAlt.settings, 'Cannot set universalReactAlt settings more than once')
-    this.realm.plugins.universalReactAlt.settings = options
+    this.realm.plugins.hapiReactRedux = this.realm.plugins.hapiReactRedux || {}
+    Hoek.assert(!this.realm.plugins.hapiReactRedux.settings, 'Cannot set hapiReactRedux settings more than once')
+    this.realm.plugins.hapiReactRedux.settings = options
 
   })
 
-  server.decorate('reply', 'hapiReactAltRender', function(context) {
+  server.decorate('reply', 'hapiReactReduxRender', function(context) {
 
-    const realm = this.realm.plugins.universalReactAlt
+    const realm = this.realm.plugins.hapiReactRedux
     Hoek.assert(realm.settings, 'Cannot render app without settings')
 
     const routes = realm.settings.routes
     const Layout = realm.settings.layout
     const assets = realm.settings.assets
     const config = realm.settings.config
-    const authStore = realm.settings.authStore//string name of the store
-    const alt = realm.settings.alt
-
+    // TODO: where does this go now?
+    // const authStore = realm.settings.authStore//string name of the store
+    const createStore = realm.settings.createStore
+    const store = createStore()
     // any extra data
     const pre = this.request.pre
 
     // is there a user?
     const auth = this.request.auth
     //bootstrap the user into the authStore option for later
-    if (auth && alt.stores[authStore]) {
-      alt.bootstrap(JSON.stringify({ [authStore]: auth}))
-    }
+    // if (auth && alt.stores[authStore]) {
+    //   alt.bootstrap(JSON.stringify({ [authStore]: auth}))
+    // }
+    //
 
     const iso = new Iso()
 
@@ -49,21 +52,24 @@ function hapiReactAltPlugin(server, options, next) {
       } else if (redirect) {
         this.redirect(redirect.pathname + redirect.search).code(301)
       } else if (props) {
-        routeResovler(props, false)
+        props.reduxStore = store
+        routeResovler(props, false, { store })
           .then(() => {
             let rootHtml = null
             let layout = null
             try {
               rootHtml = renderToString(
                 <UniversalProvider pre={pre} serverContext={context} config={config} >
-                  <RouterContext {...props} />
+                  <Provider store={store} >
+                    <RouterContext {...props} />
+                  </Provider>
                 </UniversalProvider>
               )
             } catch (e) {
               if (e) return this.response(e)
             }
             iso.add(rootHtml, {
-              alt: alt.flush(),
+              preloadedState: store.getState(),
               pre,
               context,
               config,
@@ -84,19 +90,19 @@ function hapiReactAltPlugin(server, options, next) {
   })
 
 
-  server.handler('hapiReactAltHandler', function(route, options) {
+  server.handler('hapiReactReduxHandler', function(route, options) {
     return function(request, reply) {
-      reply.hapiReactAltRender()
+      reply.hapiReactReduxRender()
     }
   })
 
   next()
 }
 
-hapiReactAltPlugin.attributes = {
-  name: 'hapi-react-alt'
+hapiReactReduxPlugin.attributes = {
+  name: 'hapi-react-redux'
 }
 
 module.exports = {
-  register: hapiReactAltPlugin
+  register: hapiReactReduxPlugin
 }

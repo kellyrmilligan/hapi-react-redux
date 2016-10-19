@@ -1,21 +1,10 @@
 import React, { Component } from 'react'
-import connectToStores from 'alt-utils/lib/connectToStores'
+import { asyncAddTodo } from './actions'
 
-import TestActions from './test-actions'
-import TestStore from './test-store'
+export default class Home extends Component {
 
-const StatefulHome = connectToStores(class Home extends Component {
-
-  static getStores() {
-    return [
-      TestStore
-    ]
-  }
-
-  static getPropsFromStores(props) {
-    return {
-      testValue: TestStore.getState().value
-    }
+  static fetch(params, query, { store }) {
+    return store.dispatch(asyncAddTodo('test-todo-redux'))
   }
 
   render() {
@@ -26,13 +15,4 @@ const StatefulHome = connectToStores(class Home extends Component {
       </main>
     )
   }
-})
-
-StatefulHome.fetch = function() {
-  return new Promise((resolve, reject) => {
-    TestActions.setValue('testfetchValue')
-    return resolve()
-  })
 }
-
-export default StatefulHome
