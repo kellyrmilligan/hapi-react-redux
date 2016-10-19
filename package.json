@@ -1,0 +1,89 @@
+{
+  "name": "hapi-react-alt",
+  "version": "1.0.0",
+  "description": "Set of Hapi plugins for universal apps",
+  "main": "plugin/index.js",
+  "scripts": {
+    "prepublish": "npm-run-all clean lint babel",
+    "build": "npm-run-all clean lint babel",
+    "babel": "babel src -d . -D -s",
+    "babel:watch": "babel src -d . -w -D -s",
+    "clean": "rm -rf ./plugin && rm -rf ./fixtures",
+    "dev": "npm-run-all clean --parallel babel:watch lint:watch server:watch",
+    "lint": "esw --ext .js --fix --ignore-path .gitignore --color src/",
+    "lint:watch": "esw --ext .js -w --fix --ignore-path .gitignore --color src/",
+    "test": "cross-env NODE_ENV=test jest",
+    "test:watch": "npm run test -- --watch"
+  },
+  "author": "Kelly Milligan",
+  "license": "ISC",
+  "jest": {
+    "testPathDirs": [
+      "src"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json"
+    ],
+    "coverageDirectory": "coverage",
+    "collectCoverage": true,
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.js$",
+    "coverageThreshold": {
+      "global": {
+        "branches": 70,
+        "functions": 70,
+        "lines": 70,
+        "statements": 70
+      }
+    },
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/fixtures/",
+      "/script/"
+    ]
+  },
+  "dependencies": {
+    "alt": "^0.18.6",
+    "alt-utils": "^1.0.0",
+    "boom": "^3.1.2",
+    "confidence": "^1.4.2",
+    "good": "^6.6.0",
+    "good-console": "^5.3.1",
+    "hapi": "^13.0.0",
+    "hoek": "^3.0.4",
+    "iso": "^5.1.0",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "react-router": "^2.0.0",
+    "route-resolver": "^2.0.0"
+  },
+  "peerDependencies": {
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "react-router": "^2.0.0",
+    "route-resolver": "^2.0.0",
+    "alt": "^0.18.6",
+    "alt-utils": "^1.0.0"
+  },
+  "devDependencies": {
+    "@trunkclub/eslint-config": "^1.0.2",
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.6.4",
+    "babel-eslint": "^6.1.2",
+    "babel-jest": "^15.0.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-trunkclub": "^3.0.4",
+    "babel-runtime": "^6.11.6",
+    "cross-env": "^2.0.1",
+    "eslint": "^2.13.1",
+    "eslint-watch": "^2.1.13",
+    "jest": "^15.1.1",
+    "nodemon": "^1.9.0",
+    "npm-run-all": "^1.5.1",
+    "source-map-support": "^0.4.0"
+  }
+}

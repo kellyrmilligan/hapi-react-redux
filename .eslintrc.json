@@ -1,0 +1,3 @@
+{
+  "extends": "@trunkclub/eslint-config"
+}
