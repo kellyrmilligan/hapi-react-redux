@@ -5,8 +5,6 @@ import Iso from 'iso'
 import Hoek from 'hoek'
 import routeResovler from 'route-resolver'
 import Boom from 'boom'
-import { Provider } from 'react-redux'
-
 import UniversalProvider from './universal-provider'
 
 function hapiReactReduxPlugin(server, options, next) {
@@ -30,19 +28,13 @@ function hapiReactReduxPlugin(server, options, next) {
     const assets = realm.settings.assets
     const config = realm.settings.config
     // TODO: where does this go now?
-    // const authStore = realm.settings.authStore//string name of the store
     const createStore = realm.settings.createStore
-    const store = createStore()
     // any extra data
     const pre = this.request.pre
-
     // is there a user?
     const auth = this.request.auth
-    //bootstrap the user into the authStore option for later
-    // if (auth && alt.stores[authStore]) {
-    //   alt.bootstrap(JSON.stringify({ [authStore]: auth}))
-    // }
-    //
+    const store = createStore({ auth })
+
 
     const iso = new Iso()
 
@@ -59,10 +51,8 @@ function hapiReactReduxPlugin(server, options, next) {
             let layout = null
             try {
               rootHtml = renderToString(
-                <UniversalProvider pre={pre} serverContext={context} config={config} >
-                  <Provider store={store} >
-                    <RouterContext {...props} />
-                  </Provider>
+                <UniversalProvider pre={pre} serverContext={context} config={config} store={store} >
+                  <RouterContext {...props} />
                 </UniversalProvider>
               )
             } catch (e) {

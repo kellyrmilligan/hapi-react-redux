@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-
-import Footer from './components/Footer'
-import AddTodo from './containers/AddTodo'
-import VisibleTodoList from './containers/VisibleTodoList'
+import { Provider } from 'react-redux'
+import TodoApp from './TodoApp'
 
 export default class App extends Component {
 
@@ -10,6 +8,7 @@ export default class App extends Component {
     config: React.PropTypes.object,
     pre: React.PropTypes.object,
     serverContext: React.PropTypes.object,
+    store: React.PropTypes.object
   }
 
   render() {
@@ -20,9 +19,9 @@ export default class App extends Component {
         {this.context.serverContext.test && this.context.serverContext.test}
         {this.context.pre.preTest && this.context.pre.preTest}
         {this.props.children}
-        <AddTodo />
-        <VisibleTodoList />
-        <Footer />
+        <Provider store={this.context.store} >
+          <TodoApp />
+        </Provider>
       </div>
     )
   }

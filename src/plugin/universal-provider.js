@@ -6,6 +6,7 @@ class UniversalProvider extends Component {
     config: PropTypes.object,
     pre: PropTypes.object,
     serverContext: PropTypes.object,
+    store: PropTypes.object
   }
 
   getChildContext() {
@@ -13,6 +14,7 @@ class UniversalProvider extends Component {
       config: this.props.config,
       pre: this.props.config,
       serverContext: this.props.config,
+      store: this.props.store,
     }
   }
 
