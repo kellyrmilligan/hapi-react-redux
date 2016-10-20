@@ -1,28 +1,33 @@
-hapi-react-alt
+hapi-react-redux
 =====================
 hapi plugin for supporting universal rendering on the server side.
 
-# Dependencies
-* react router 2
-* react 15
-* alt 0.18
+# Peer Dependencies
+```
+react": "^15.3.0"
+"react-dom": "^15.3.0"
+"react-router": "^2.0.0"
+"react-redux": "^4.4.5"
+"redux": "^3.6.0"
+"route-resolver": "^2.0.0"
+```
 
 # Why?
 yes you could just write a module, import it, and re-use it in handlers and what not. but why not follow hapi's nice plugin architecture and make it easy?
 
 ## Usage
-hapi-react-alt tries to be un-opinionated where possible. In a few places for the sake of ease of use, a few constraints are in place for the top level component of your application. The patterns are modeled after the `vision` hapi plugin for rendering template views.
+hapi-react-redux tries to be un-opinionated where possible. In a few places for the sake of ease of use, a few constraints are in place for the top level component of your application. The patterns are modeled after the `vision` hapi plugin for rendering template views.
 
 ## Register the plugin and configure it
 ```js
-import HapiReactAlt from 'hapi-react-alt'
+import HapiReactRedux from 'hapi-react-redux'
 const server = new Hapi.Server()
 server.connection()
-server.register(HapiReactAlt, (err) => {
-  server.hapiReactAlt({
+server.register(HapiReactRedux, (err) => {
+  server.hapiReactRedux({
     routes : clientRoutes,//routes for react router
     layout : layout,//layout file, see more below
-    alt    : alt,//alt instance
+    createStore: createStore,//should be a function that configures the redux store
     config : {//any app config you want passed to the client side app
       value: '1234'
     },
@@ -38,16 +43,16 @@ server.register(HapiReactAlt, (err) => {
 
 this registers the plugin, and configures it for use.
 
-## Use the `reply.hapiReactAltRender` method to respond to a request
+## Use the `reply.hapiReactReduxRender` method to respond to a request
 ```js
-import HapiReactAlt from 'hapi-react-alt'
+import HapiReactRedux from 'hapi-react-redux'
 const server = new Hapi.Server()
 server.connection()
-server.register(HapiReactAlt, (err) => {
-  server.hapiReactAlt({
+server.register(HapiReactRedux, (err) => {
+  server.hapiReactRedux({
     routes : clientRoutes,//routes for react router
     layout : layout,//layout file, see more below
-    alt    : alt,//alt instance
+    createStore: createStore,//should be a function that configures the redux store
     config : {//any app config you want passed to the client side app
       value: '1234'
     },
@@ -62,12 +67,12 @@ server.register(HapiReactAlt, (err) => {
     method: 'GET',
     path: '/',
     handler(request, reply) {
-      return reply.hapiReactAltRender()
+      return reply.hapiReactReduxRender()
     }
   })
 })
 ```
-The plugin decorates the reply server method, and adds the `hapiReactAltRender` method to it. This will use the options configured for your application, such as routes from react router, etc. if you need to pass some additional data from the server in your controller, you can send an object to the method:
+The plugin decorates the reply server method, and adds the `hapiReactReduxRender` method to it. This will use the options configured for your application, such as routes from react router, etc. if you need to pass some additional data from the server in your controller, you can send an object to the method:
 
 ```js
 server.route({
@@ -75,7 +80,7 @@ server.route({
   path: '/',
   handler(request, reply) {
     //fetch some data
-    return reply.hapiReactAltRender({
+    return reply.hapiReactReduxRender({
       user: {
         name: 'Homer'//this will be available to your application as well. more on this in a bit
       }
@@ -91,11 +96,11 @@ hapi also has server handlers, where you can assign a predefined handler to a ro
 server.route({
   method: 'GET',
   path: '/',
-  handler: { hapiReactAltHandler: {} }
+  handler: { hapiReactReduxHandler: {} }
 })
 ```
 
-this will call the `reply.hapiReactAltRender` for you in your controller mapped to that route.
+this will call the `reply.hapiReactReduxRender` for you in your controller mapped to that route.
 
 ## Layout file
 For server rendering to work, you need a layout file for other parts of the markup that are not directly rendered by react.
@@ -110,7 +115,7 @@ an example layout file is in the fixtures folder under src.
 Server rendering with React Router 2 requires the use of a component `RouterContext`. In order to pass props into this component, there are several methods built into react to do this. This plugin has a light Component that wraps `RouterContext`, `UniversalProvider`.
 
 ```js
-<UniversalProvider pre={pre} serverContext={context} config={config} >
+<UniversalProvider pre={pre} serverContext={context} config={config} store={store} >
   <RouterContext {...props} />
 </UniversalProvider>
 ```
@@ -121,6 +126,8 @@ In your `App.js` file, an example to handle this would be something like:
 
 ```js
 import React, { Component } from 'react'
+import { Provider } from 'react-redux'
+import TodoApp from './TodoApp'
 
 export default class App extends Component {
 
@@ -128,13 +135,14 @@ export default class App extends Component {
     config: React.PropTypes.object,
     pre: React.PropTypes.object,
     serverContext: React.PropTypes.object,
+    store: React.PropTypes.object,
   }
 
   render() {
     return (
-      <div>
-        {this.props.children}
-      </div>
+      <Provider store={this.context.store} >
+        <TodoApp />
+      </Provider>
     )
   }
 }
@@ -147,9 +155,9 @@ Each component that needs data for a route needs to be in the RR handler hierarc
 
 ### Example
 ```js
-Component.fetch = function(params, query) {
+Component.fetch = function(params, query, store) {
   //a source method on an alt store returns a promise
-  return UserStore.loadUser()
+  return store.dispatch(fetchTrunks())//dispatch an async action
 }
 ```
 
