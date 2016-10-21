@@ -40,7 +40,8 @@ var UniversalProvider = function (_Component) {
       return {
         config: this.props.config,
         pre: this.props.config,
-        serverContext: this.props.config
+        serverContext: this.props.config,
+        store: this.props.store
       };
     }
   }, {
@@ -59,7 +60,8 @@ var UniversalProvider = function (_Component) {
 UniversalProvider.childContextTypes = {
   config: _react.PropTypes.object,
   pre: _react.PropTypes.object,
-  serverContext: _react.PropTypes.object
+  serverContext: _react.PropTypes.object,
+  store: _react.PropTypes.object
 };
 exports.default = UniversalProvider;
 module.exports = exports['default'];

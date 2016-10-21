@@ -1,8 +1,7 @@
 'use strict';
 
 var Hapi = require('hapi');
-
-var alt = require('fixtures/alt');
+var createStore = require('fixtures/createStore');
 var clientRoutes = require('fixtures/routes');
 var badClientRoutes = require('fixtures/bad-routes');
 var redirectClientRoutes = require('fixtures/redirect-routes');
@@ -12,42 +11,42 @@ var badLayout = require('fixtures/bad-layout');
 var options = {
   routes: clientRoutes,
   layout: layout,
-  alt: alt,
   config: {
     honeybadger: '1234'
   },
   assets: {
     styles: {},
     scripts: {}
-  }
+  },
+  createStore: createStore
 };
 
-var HapiReactAlt = require('plugin/index');
+var HapiReactRedux = require('plugin/index');
 
-describe('hapi react alt plugin', function () {
+describe('hapi react redux plugin', function () {
   it('can be registered', function (done) {
     var server = new Hapi.Server();
     server.connection();
-    server.register(HapiReactAlt, function (err) {
+    server.register(HapiReactRedux, function (err) {
       expect(server).toBeTruthy();
-      expect(server.hapiReactAlt).toBeTruthy();
+      expect(server.hapiReactRedux).toBeTruthy();
       expect(err).toBeUndefined();
       done();
     });
   });
 
-  it('can set options with the hapiReactAlt method', function (done) {
+  it('can set options with the hapiReactRedux method', function (done) {
     var server = new Hapi.Server();
     server.connection();
-    server.register(HapiReactAlt, function (err) {
+    server.register(HapiReactRedux, function (err) {
       options.layout = layout;
       options.routes = clientRoutes;
-      server.hapiReactAlt(options);
+      server.hapiReactRedux(options);
       server.route({
         method: 'GET',
         path: '/',
         handler: function handler(request, reply) {
-          return reply.hapiReactAltRender();
+          return reply.hapiReactReduxRender();
         }
       });
       server.inject({
@@ -61,18 +60,18 @@ describe('hapi react alt plugin', function () {
     });
   });
 
-  it('can have a handler call the hapiReactAltRender method on reply', function (done) {
+  it('can have a handler call the hapiReactReduxRender method on reply', function (done) {
     var server = new Hapi.Server();
     server.connection();
-    server.register(HapiReactAlt, function (err) {
+    server.register(HapiReactRedux, function (err) {
       options.layout = layout;
       options.routes = clientRoutes;
-      server.hapiReactAlt(options);
+      server.hapiReactRedux(options);
       server.route({
         method: 'GET',
         path: '/',
         handler: function handler(request, reply) {
-          return reply.hapiReactAltRender();
+          return reply.hapiReactReduxRender();
         }
       });
       server.inject({
@@ -89,14 +88,14 @@ describe('hapi react alt plugin', function () {
   it('can use the server handler instead of calling the method directly', function (done) {
     var server = new Hapi.Server();
     server.connection();
-    server.register(HapiReactAlt, function (err) {
+    server.register(HapiReactRedux, function (err) {
       options.layout = layout;
       options.routes = clientRoutes;
-      server.hapiReactAlt(options);
+      server.hapiReactRedux(options);
       server.route({
         method: 'GET',
         path: '/',
-        handler: { hapiReactAltHandler: {} }
+        handler: { hapiReactReduxHandler: {} }
       });
       server.inject({
         method: 'GET',
@@ -112,63 +111,37 @@ describe('hapi react alt plugin', function () {
   it('can collect data from fetch methods on route handlers to have in the rendered output via route-resolver', function (done) {
     var server = new Hapi.Server();
     server.connection();
-    server.register(HapiReactAlt, function (err) {
+    server.register(HapiReactRedux, function (err) {
       options.layout = layout;
       options.routes = clientRoutes;
-      server.hapiReactAlt(options);
+      server.hapiReactRedux(options);
       server.route({
         method: 'GET',
         path: '/',
-        handler: { hapiReactAltHandler: {} }
+        handler: { hapiReactReduxHandler: {} }
       });
       server.inject({
         method: 'GET',
         url: '/'
       }, function (res) {
-        expect(res.result).toContain('testfetchValue');
+        expect(res.result).toContain('test-todo-redux');
         done();
       });
     });
   });
 
-  it('can use data send to the hapiReactAltRender method on reply', function (done) {
+  it('can use data sent to the hapiReactReduxRender method on reply', function (done) {
     var server = new Hapi.Server();
     server.connection();
-    server.register(HapiReactAlt, function (err) {
+    server.register(HapiReactRedux, function (err) {
       options.layout = layout;
       options.routes = clientRoutes;
-      server.hapiReactAlt(options);
+      server.hapiReactRedux(options);
       server.route({
         method: 'GET',
         path: '/',
         handler: function handler(request, reply) {
-          return reply.hapiReactAltRender({
-            test: 'the test'
-          });
-        }
-      });
-      server.inject({
-        method: 'GET',
-        url: '/'
-      }, function (res) {
-        expect(res.result).toContain('the test');
-        done();
-      });
-    });
-  });
-
-  it('can use data sent to the hapiReactAltRender method on reply', function (done) {
-    var server = new Hapi.Server();
-    server.connection();
-    server.register(HapiReactAlt, function (err) {
-      options.layout = layout;
-      options.routes = clientRoutes;
-      server.hapiReactAlt(options);
-      server.route({
-        method: 'GET',
-        path: '/',
-        handler: function handler(request, reply) {
-          return reply.hapiReactAltRender({
+          return reply.hapiReactReduxRender({
             test: 'the test'
           });
         }
@@ -186,10 +159,10 @@ describe('hapi react alt plugin', function () {
   it('can use data from route prereqs', function (done) {
     var server = new Hapi.Server();
     server.connection();
-    server.register(HapiReactAlt, function (err) {
+    server.register(HapiReactRedux, function (err) {
       options.layout = layout;
       options.routes = clientRoutes;
-      server.hapiReactAlt(options);
+      server.hapiReactRedux(options);
       server.route({
         method: 'GET',
         path: '/',
@@ -199,7 +172,7 @@ describe('hapi react alt plugin', function () {
             }, assign: 'preTest' }]
         },
         handler: function handler(request, reply) {
-          return reply.hapiReactAltRender();
+          return reply.hapiReactReduxRender();
         }
       });
       server.inject({
@@ -215,15 +188,15 @@ describe('hapi react alt plugin', function () {
   it('will redirect if RR has a redirect route in it', function (done) {
     var server = new Hapi.Server();
     server.connection();
-    server.register(HapiReactAlt, function (err) {
+    server.register(HapiReactRedux, function (err) {
       options.layout = layout;
       options.routes = redirectClientRoutes;
-      server.hapiReactAlt(options);
+      server.hapiReactRedux(options);
       server.route({
         method: 'GET',
         path: '/{path*}',
         handler: function handler(request, reply) {
-          return reply.hapiReactAltRender();
+          return reply.hapiReactReduxRender();
         }
       });
       server.inject({
@@ -239,15 +212,15 @@ describe('hapi react alt plugin', function () {
   it('will throw error if layout/components are not valid', function (done) {
     var server = new Hapi.Server();
     server.connection();
-    server.register(HapiReactAlt, function (err) {
+    server.register(HapiReactRedux, function (err) {
       options.layout = badLayout;
       options.routes = clientRoutes;
-      server.hapiReactAlt(options);
+      server.hapiReactRedux(options);
       server.route({
         method: 'GET',
         path: '/',
         handler: function handler(request, reply) {
-          return reply.hapiReactAltRender();
+          return reply.hapiReactReduxRender();
         }
       });
       server.inject({
@@ -263,15 +236,15 @@ describe('hapi react alt plugin', function () {
   it('will 404 if not found', function (done) {
     var server = new Hapi.Server();
     server.connection();
-    server.register(HapiReactAlt, function (err) {
+    server.register(HapiReactRedux, function (err) {
       options.layout = layout;
       options.routes = clientRoutes;
-      server.hapiReactAlt(options);
+      server.hapiReactRedux(options);
       server.route({
         method: 'GET',
         path: '/{path*}',
         handler: function handler(request, reply) {
-          return reply.hapiReactAltRender();
+          return reply.hapiReactReduxRender();
         }
       });
       server.inject({
@@ -287,15 +260,15 @@ describe('hapi react alt plugin', function () {
   it('will throw error if react router throws an err', function (done) {
     var server = new Hapi.Server();
     server.connection();
-    server.register(HapiReactAlt, function (err) {
+    server.register(HapiReactRedux, function (err) {
       options.layout = layout;
       options.routes = badClientRoutes;
-      server.hapiReactAlt(options);
+      server.hapiReactRedux(options);
       server.route({
         method: 'GET',
         path: '/',
         handler: function handler(request, reply) {
-          return reply.hapiReactAltRender();
+          return reply.hapiReactReduxRender();
         }
       });
       server.inject({

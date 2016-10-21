@@ -1,1 +1,0 @@
-{"version":3,"sources":["../src/fixtures/alt.js"],"names":["alt"],"mappings":";;;;;;AAAA;;;;;;AAEA,IAAMA,MAAM,mBAAZ;;kBAEeA,G","file":"alt.js","sourcesContent":["import Alt from 'alt'\n\nconst alt = new Alt()\n\nexport default alt\n"]}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["../src/fixtures/test-actions.js"],"names":["testActions","generateActions"],"mappings":";;;;;;AAAA;;;;;;AAEA,IAAMA,cAAc,cAAIC,eAAJ,CAAoB,UAApB,CAApB;;kBAEeD,W","file":"test-actions.js","sourcesContent":["import alt from './alt'\n\nconst testActions = alt.generateActions('setValue')\n\nexport default testActions\n"]}

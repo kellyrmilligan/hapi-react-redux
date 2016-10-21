@@ -25,11 +25,17 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = require('react-redux');
+var _Footer = require('./components/Footer');
 
-var _TodoApp = require('./TodoApp');
+var _Footer2 = _interopRequireDefault(_Footer);
 
-var _TodoApp2 = _interopRequireDefault(_TodoApp);
+var _AddTodo = require('./containers/AddTodo');
+
+var _AddTodo2 = _interopRequireDefault(_AddTodo);
+
+var _VisibleTodoList = require('./containers/VisibleTodoList');
+
+var _VisibleTodoList2 = _interopRequireDefault(_VisibleTodoList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47,20 +53,9 @@ var App = function (_Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(
-          'h1',
-          null,
-          'app'
-        ),
-        this.context.config.honeybadger,
-        this.context.serverContext.test && this.context.serverContext.test,
-        this.context.pre.preTest && this.context.pre.preTest,
-        this.props.children,
-        _react2.default.createElement(
-          _reactRedux.Provider,
-          { store: this.context.store },
-          _react2.default.createElement(_TodoApp2.default, null)
-        )
+        _react2.default.createElement(_AddTodo2.default, null),
+        _react2.default.createElement(_VisibleTodoList2.default, null),
+        _react2.default.createElement(_Footer2.default, null)
       );
     }
   }]);
@@ -75,4 +70,4 @@ App.contextTypes = {
 };
 exports.default = App;
 module.exports = exports['default'];
-//# sourceMappingURL=App.js.map
+//# sourceMappingURL=TodoApp.js.map

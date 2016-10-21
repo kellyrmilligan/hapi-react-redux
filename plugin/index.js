@@ -1,9 +1,5 @@
 'use strict';
 
-var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
-
-var _defineProperty3 = _interopRequireDefault(_defineProperty2);
-
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -34,38 +30,33 @@ var _universalProvider2 = _interopRequireDefault(_universalProvider);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function hapiReactAltPlugin(server, options, next) {
+function hapiReactReduxPlugin(server, options, next) {
 
-  server.decorate('server', 'hapiReactAlt', function (options) {
+  server.decorate('server', 'hapiReactRedux', function (options) {
 
     _hoek2.default.assert(options, 'Missing options');
-    this.realm.plugins.universalReactAlt = this.realm.plugins.universalReactAlt || {};
-    _hoek2.default.assert(!this.realm.plugins.universalReactAlt.settings, 'Cannot set universalReactAlt settings more than once');
-    this.realm.plugins.universalReactAlt.settings = options;
+    this.realm.plugins.hapiReactRedux = this.realm.plugins.hapiReactRedux || {};
+    _hoek2.default.assert(!this.realm.plugins.hapiReactRedux.settings, 'Cannot set hapiReactRedux settings more than once');
+    this.realm.plugins.hapiReactRedux.settings = options;
   });
 
-  server.decorate('reply', 'hapiReactAltRender', function (context) {
+  server.decorate('reply', 'hapiReactReduxRender', function (context) {
     var _this = this;
 
-    var realm = this.realm.plugins.universalReactAlt;
+    var realm = this.realm.plugins.hapiReactRedux;
     _hoek2.default.assert(realm.settings, 'Cannot render app without settings');
 
     var routes = realm.settings.routes;
     var Layout = realm.settings.layout;
     var assets = realm.settings.assets;
     var config = realm.settings.config;
-    var authStore = realm.settings.authStore; //string name of the store
-    var alt = realm.settings.alt;
-
+    // TODO: where does this go now?
+    var createStore = realm.settings.createStore;
     // any extra data
     var pre = this.request.pre;
-
     // is there a user?
     var auth = this.request.auth;
-    //bootstrap the user into the authStore option for later
-    if (auth && alt.stores[authStore]) {
-      alt.bootstrap(JSON.stringify((0, _defineProperty3.default)({}, authStore, auth)));
-    }
+    var store = createStore({ auth: auth });
 
     var iso = new _iso2.default();
 
@@ -75,20 +66,21 @@ function hapiReactAltPlugin(server, options, next) {
       } else if (redirect) {
         _this.redirect(redirect.pathname + redirect.search).code(301);
       } else if (props) {
-        (0, _routeResolver2.default)(props, false).then(function () {
+        props.reduxStore = store;
+        (0, _routeResolver2.default)(props, false, { store: store }).then(function () {
           var rootHtml = null;
           var layout = null;
           try {
             rootHtml = (0, _server.renderToString)(_react2.default.createElement(
               _universalProvider2.default,
-              { pre: pre, serverContext: context, config: config },
+              { pre: pre, serverContext: context, config: config, store: store },
               _react2.default.createElement(_reactRouter.RouterContext, props)
             ));
           } catch (e) {
             if (e) return _this.response(e);
           }
           iso.add(rootHtml, {
-            alt: alt.flush(),
+            preloadedState: store.getState(),
             pre: pre,
             context: context,
             config: config
@@ -107,20 +99,20 @@ function hapiReactAltPlugin(server, options, next) {
     });
   });
 
-  server.handler('hapiReactAltHandler', function (route, options) {
+  server.handler('hapiReactReduxHandler', function (route, options) {
     return function (request, reply) {
-      reply.hapiReactAltRender();
+      reply.hapiReactReduxRender();
     };
   });
 
   next();
 }
 
-hapiReactAltPlugin.attributes = {
-  name: 'hapi-react-alt'
+hapiReactReduxPlugin.attributes = {
+  name: 'hapi-react-redux'
 };
 
 module.exports = {
-  register: hapiReactAltPlugin
+  register: hapiReactReduxPlugin
 };
 //# sourceMappingURL=index.js.map
