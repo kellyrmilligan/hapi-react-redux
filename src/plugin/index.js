@@ -1,6 +1,7 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { match, RouterContext } from 'react-router'
+import { Provider } from 'react-redux'
 import Iso from 'iso'
 import Hoek from 'hoek'
 import routeResovler from 'route-resolver'
@@ -51,7 +52,7 @@ function hapiReactReduxPlugin(server, options, next) {
             let layout = null
             try {
               rootHtml = renderToString(
-                <UniversalProvider pre={pre} serverContext={context} config={config} store={store} >
+                <UniversalProvider pre={pre} serverContext={context} config={config} store={store}>
                   <RouterContext {...props} />
                 </UniversalProvider>
               )

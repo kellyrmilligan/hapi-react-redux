@@ -1,5 +1,5 @@
 {
-  "name": "hapi-react-alt",
+  "name": "@trunkclub/hapi-react-redux",
   "version": "1.0.0",
   "description": "Set of Hapi plugins for universal apps",
   "main": "plugin/index.js",
