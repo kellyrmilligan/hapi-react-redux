@@ -109,7 +109,7 @@ function hapiReactReduxPlugin(server, options, next) {
 }
 
 hapiReactReduxPlugin.attributes = {
-  name: 'hapi-react-redux'
+  name: '@trunkclub/hapi-react-redux'
 };
 
 module.exports = {
