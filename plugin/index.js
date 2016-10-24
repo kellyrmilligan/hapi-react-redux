@@ -24,9 +24,7 @@ var _boom = require('boom');
 
 var _boom2 = _interopRequireDefault(_boom);
 
-var _universalProvider = require('./universal-provider');
-
-var _universalProvider2 = _interopRequireDefault(_universalProvider);
+var _reactRedux = require('react-redux');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -56,39 +54,35 @@ function hapiReactReduxPlugin(server, options, next) {
     var pre = this.request.pre;
     // is there a user?
     var auth = this.request.auth;
-    var store = createStore({ auth: auth });
+    var store = createStore({ auth: auth, pre: pre, config: config, serverContext: context });
 
     var iso = new _iso2.default();
 
     (0, _reactRouter.match)({ routes: routes, location: this.request.raw.req.url }, function (err, redirect, props) {
       if (err) {
-        return _this.response(err);
+        return _this.response(_boom2.default.badImplementation('There was a react router error rendering the route - ' + _this.request.raw.req.url, e));
       } else if (redirect) {
         _this.redirect(redirect.pathname + redirect.search).code(301);
       } else if (props) {
-        props.reduxStore = store;
         (0, _routeResolver2.default)(props, false, { store: store }).then(function () {
           var rootHtml = null;
           var layout = null;
           try {
             rootHtml = (0, _server.renderToString)(_react2.default.createElement(
-              _universalProvider2.default,
-              { pre: pre, serverContext: context, config: config, store: store },
+              _reactRedux.Provider,
+              { store: store },
               _react2.default.createElement(_reactRouter.RouterContext, props)
             ));
           } catch (e) {
-            if (e) return _this.response(e);
+            return _this.response(_boom2.default.badImplementation('There was an error rendering the route - ' + _this.request.raw.req.url, e));
           }
           iso.add(rootHtml, {
-            preloadedState: store.getState(),
-            pre: pre,
-            context: context,
-            config: config
+            preloadedState: store.getState()
           });
           try {
             layout = (0, _server.renderToString)(_react2.default.createElement(Layout, { assets: assets, config: config, content: iso.render() }));
           } catch (e) {
-            if (e) return _this.response(e);
+            return _this.response(_boom2.default.badImplementation('There was an error rendering the layout while rendring the route - ' + _this.request.raw.req.url, e));
           }
           _this.response('<!doctype html>\n' + layout);
         });

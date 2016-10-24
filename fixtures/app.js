@@ -25,8 +25,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = require('react-redux');
-
 var _TodoApp = require('./TodoApp');
 
 var _TodoApp2 = _interopRequireDefault(_TodoApp);
@@ -52,27 +50,14 @@ var App = function (_Component) {
           null,
           'app'
         ),
-        this.context.config.honeybadger,
-        this.context.serverContext.test && this.context.serverContext.test,
-        this.context.pre.preTest && this.context.pre.preTest,
-        this.props.children,
-        _react2.default.createElement(
-          _reactRedux.Provider,
-          { store: this.context.store },
-          _react2.default.createElement(_TodoApp2.default, null)
-        )
+        _react2.default.createElement(_TodoApp2.default, null),
+        this.props.children
       );
     }
   }]);
   return App;
 }(_react.Component);
 
-App.contextTypes = {
-  config: _react2.default.PropTypes.object,
-  pre: _react2.default.PropTypes.object,
-  serverContext: _react2.default.PropTypes.object,
-  store: _react2.default.PropTypes.object
-};
 exports.default = App;
 module.exports = exports['default'];
 //# sourceMappingURL=App.js.map

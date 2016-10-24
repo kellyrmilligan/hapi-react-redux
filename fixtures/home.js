@@ -47,11 +47,6 @@ var Home = function (_Component) {
           'h2',
           null,
           'home'
-        ),
-        _react2.default.createElement(
-          'p',
-          null,
-          this.props.testValue
         )
       );
     }

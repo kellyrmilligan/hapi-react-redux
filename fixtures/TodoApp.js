@@ -39,15 +39,15 @@ var _VisibleTodoList2 = _interopRequireDefault(_VisibleTodoList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var App = function (_Component) {
-  (0, _inherits3.default)(App, _Component);
+var TodoApp = function (_Component) {
+  (0, _inherits3.default)(TodoApp, _Component);
 
-  function App() {
-    (0, _classCallCheck3.default)(this, App);
-    return (0, _possibleConstructorReturn3.default)(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+  function TodoApp() {
+    (0, _classCallCheck3.default)(this, TodoApp);
+    return (0, _possibleConstructorReturn3.default)(this, (TodoApp.__proto__ || Object.getPrototypeOf(TodoApp)).apply(this, arguments));
   }
 
-  (0, _createClass3.default)(App, [{
+  (0, _createClass3.default)(TodoApp, [{
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -59,15 +59,9 @@ var App = function (_Component) {
       );
     }
   }]);
-  return App;
+  return TodoApp;
 }(_react.Component);
 
-App.contextTypes = {
-  config: _react2.default.PropTypes.object,
-  pre: _react2.default.PropTypes.object,
-  serverContext: _react2.default.PropTypes.object,
-  store: _react2.default.PropTypes.object
-};
-exports.default = App;
+exports.default = TodoApp;
 module.exports = exports['default'];
 //# sourceMappingURL=TodoApp.js.map

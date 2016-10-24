@@ -3,8 +3,8 @@ import { asyncAddTodo } from './actions'
 
 export default class Home extends Component {
 
-  static fetch(params, query, { store }) {
-    return store.dispatch(asyncAddTodo('test-todo-redux'))
+  static fetch(params, query, { dispatch }) {
+    return dispatch(asyncAddTodo('test-todo-redux'))
   }
 
   render() {

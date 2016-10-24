@@ -43,7 +43,7 @@ function hapiReactReduxPlugin(server, options, next) {
       } else if (redirect) {
         this.redirect(redirect.pathname + redirect.search).code(301)
       } else if (props) {
-        routeResovler(props, false, { store })
+        routeResovler(props, false, { dispatch: store.dispatch })
           .then(() => {
             let rootHtml = null
             let layout = null

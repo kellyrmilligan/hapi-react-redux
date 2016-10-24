@@ -31,7 +31,10 @@ var getVisibleTodos = function getVisibleTodos(todos, filter) {
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+    todos: getVisibleTodos(state.todos, state.visibilityFilter),
+    serverContext: state.serverContext,
+    pre: state.pre,
+    config: state.config
   };
 };
 

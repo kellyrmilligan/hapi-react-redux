@@ -20,19 +20,45 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var TodoList = function TodoList(_ref) {
   var todos = _ref.todos;
+  var serverContext = _ref.serverContext;
+  var pre = _ref.pre;
+  var config = _ref.config;
   var onTodoClick = _ref.onTodoClick;
   return _react2.default.createElement(
-    'ul',
+    'div',
     null,
-    todos.map(function (todo) {
-      return _react2.default.createElement(_Todo2.default, (0, _extends3.default)({
-        key: todo.id
-      }, todo, {
-        onClick: function onClick() {
-          return onTodoClick(todo.id);
-        }
-      }));
-    })
+    _react2.default.createElement(
+      'ul',
+      null,
+      todos.map(function (todo) {
+        return _react2.default.createElement(_Todo2.default, (0, _extends3.default)({
+          key: todo.id
+        }, todo, {
+          onClick: function onClick() {
+            return onTodoClick(todo.id);
+          }
+        }));
+      })
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'p',
+        null,
+        serverContext.test
+      ),
+      _react2.default.createElement(
+        'p',
+        null,
+        pre.preTest
+      ),
+      _react2.default.createElement(
+        'p',
+        null,
+        config.honeybadger
+      )
+    )
   );
 };
 
