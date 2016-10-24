@@ -10,6 +10,7 @@ react": "^15.3.0"
 "react-redux": "^4.4.5"
 "redux": "^3.6.0"
 "route-resolver": "^2.0.0"
+"hapi": "^13.0.0"
 ```
 
 # Why?
@@ -42,6 +43,9 @@ server.register(HapiReactRedux, (err) => {
 ```
 
 this registers the plugin, and configures it for use.
+
+## Create store
+This should be a function that returns your fully configured redux store. see example in `src/fixtures/createStore.js`
 
 ## Use the `reply.hapiReactReduxRender` method to respond to a request
 ```js
@@ -160,6 +164,21 @@ Component.fetch = function(params, query, store) {
   return store.dispatch(fetchTrunks())//dispatch an async action
 }
 ```
+
+## Reducers
+This library provides a set of reducers to add to your store configuration to facilitate the server rendering process to add it's data to the redux store.
+
+### Auth
+Hapi has an auth object that ends up being populated after a user has signed in. This object is added to the store during the rendering process. Simply include this reducer in your store and access it like you would any other data.
+
+### Config
+Any configuration data your application needs is passed from the server to the client. The provided reducer adds it to the redux store for your app to use.
+
+### Pre handlers
+Hapi has a concept called route prerequisites. These are functions that execute before a route handler is invoked. To enable this data being available in your react app, a reducer is provided to add it to the store.
+
+### Server Context
+If there is a case where you want to send some data in a response directly from the server, you can send this data to the render method provided. It will be added to the `serverContext` key of your store.
 
 ## Flux standard actions
 The reducers and action creators included with this module try to adhere to flux standard actions spec

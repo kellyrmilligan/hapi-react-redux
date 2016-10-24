@@ -63,6 +63,7 @@
     "route-resolver": "^2.0.0"
   },
   "peerDependencies": {
+    "hapi": "^13.0.0",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
     "react-router": "^2.0.0",
