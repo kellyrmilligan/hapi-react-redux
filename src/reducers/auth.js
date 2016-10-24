@@ -1,7 +1,10 @@
 const auth = (state = {}, action) => {
   switch (action.type) {
-    case 'auth':
-      return Object.assign({}, state, {auth: action.auth})
+    case 'SET_AUTH':
+      return {
+        ...state,
+        ...action.payload
+      }
     default:
       return state
   }

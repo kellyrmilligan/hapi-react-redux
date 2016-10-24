@@ -55,7 +55,6 @@ describe('hapi react redux plugin', () => {
         url: '/?q=test'
       }, (res) => {
         expect(res.result).toContain('home')
-        expect(res.result).toContain('123')
         done()
       })
     })
@@ -80,7 +79,6 @@ describe('hapi react redux plugin', () => {
         url: '/'
       }, (res) => {
         expect(res.result).toContain('home')
-        expect(res.result).toContain('123')
         done()
       })
     })
@@ -103,7 +101,6 @@ describe('hapi react redux plugin', () => {
         url: '/'
       }, (res) => {
         expect(res.result).toContain('home')
-        expect(res.result).toContain('123')
         done()
       })
     })
@@ -151,7 +148,7 @@ describe('hapi react redux plugin', () => {
         method: 'GET',
         url: '/'
       }, (res) => {
-        expect(res.result).toContain('the test')
+        expect(res.result).toContain('>the test</p>')
         done()
       })
     })
@@ -180,7 +177,31 @@ describe('hapi react redux plugin', () => {
         method: 'GET',
         url: '/'
       }, (res) => {
-        expect(res.result).toContain('preTest')
+        expect(res.result).toContain('>preTest</p>')
+        done()
+      })
+    })
+  })
+
+  it('can use data from config', (done) => {
+    const server = new Hapi.Server()
+    server.connection()
+    server.register(HapiReactRedux, (err) => {
+      options.layout = layout
+      options.routes = clientRoutes
+      server.hapiReactRedux(options)
+      server.route({
+        method: 'GET',
+        path: '/',
+        handler(request, reply) {
+          return reply.hapiReactReduxRender()
+        }
+      })
+      server.inject({
+        method: 'GET',
+        url: '/'
+      }, (res) => {
+        expect(res.result).toContain('>1234</p>')
         done()
       })
     })

@@ -11,7 +11,6 @@ export default class Home extends Component {
     return (
       <main>
         <h2>home</h2>
-        <p>{this.props.testValue}</p>
       </main>
     )
   }

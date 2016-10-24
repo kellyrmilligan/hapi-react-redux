@@ -1,8 +1,8 @@
 import React from 'react'
 import { Route, IndexRoute, Redirect } from 'react-router'
 
-import App from './app'
-import Home from './home'
+import App from './App'
+import Home from './Home'
 
 const routes = (
   <Route path="/" component={App}>

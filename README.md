@@ -161,6 +161,10 @@ Component.fetch = function(params, query, store) {
 }
 ```
 
+## Flux standard actions
+The reducers and action creators included with this module try to adhere to flux standard actions spec
+https://github.com/acdlite/flux-standard-action
+
 For more reading, see:
 https://github.com/ReactTraining/react-router/issues/3183
 

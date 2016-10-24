@@ -5,7 +5,7 @@ import Iso from 'iso'
 import Hoek from 'hoek'
 import routeResovler from 'route-resolver'
 import Boom from 'boom'
-import UniversalProvider from './universal-provider'
+import { Provider } from 'react-redux'
 
 function hapiReactReduxPlugin(server, options, next) {
 
@@ -33,41 +33,36 @@ function hapiReactReduxPlugin(server, options, next) {
     const pre = this.request.pre
     // is there a user?
     const auth = this.request.auth
-    const store = createStore({ auth })
-
+    const store = createStore({ auth, pre, config, serverContext: context })
 
     const iso = new Iso()
 
     match({ routes, location: this.request.raw.req.url }, (err, redirect, props) => {
       if (err) {
-        return this.response(err)
+        return this.response(Boom.badImplementation(`There was a react router error rendering the route - ${this.request.raw.req.url}`, e))
       } else if (redirect) {
         this.redirect(redirect.pathname + redirect.search).code(301)
       } else if (props) {
-        props.reduxStore = store
         routeResovler(props, false, { store })
           .then(() => {
             let rootHtml = null
             let layout = null
             try {
               rootHtml = renderToString(
-                <UniversalProvider pre={pre} serverContext={context} config={config} store={store}>
+                <Provider store={store}>
                   <RouterContext {...props} />
-                </UniversalProvider>
+                </Provider>
               )
             } catch (e) {
-              if (e) return this.response(e)
+              return this.response(Boom.badImplementation(`There was an error rendering the route - ${this.request.raw.req.url}`, e))
             }
             iso.add(rootHtml, {
-              preloadedState: store.getState(),
-              pre,
-              context,
-              config,
+              preloadedState: store.getState()
             })
             try {
               layout = renderToString(<Layout assets={assets} config={config} content={iso.render()} />)
             } catch (e) {
-              if (e) return this.response(e)
+              return this.response(Boom.badImplementation(`There was an error rendering the layout while rendring the route - ${this.request.raw.req.url}`, e))
             }
             this.response(`<!doctype html>\n${layout}`)
           })
@@ -78,7 +73,6 @@ function hapiReactReduxPlugin(server, options, next) {
     })
 
   })
-
 
   server.handler('hapiReactReduxHandler', function(route, options) {
     return function(request, reply) {
