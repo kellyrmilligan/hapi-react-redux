@@ -4,7 +4,6 @@
   "description": "Set of Hapi plugins for universal apps",
   "main": "plugin/index.js",
   "scripts": {
-    "prepublish": "npm-run-all clean lint babel",
     "build": "npm-run-all clean lint babel",
     "babel": "babel src -d . -D -s",
     "babel:watch": "babel src -d . -w -D -s",
@@ -12,6 +11,7 @@
     "dev": "npm-run-all clean --parallel babel:watch lint:watch server:watch",
     "lint": "esw --ext .js --fix --ignore-path .gitignore --color src/",
     "lint:watch": "esw --ext .js -w --fix --ignore-path .gitignore --color src/",
+    "prepublish": "npm run build",
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "npm run test -- --watch"
   },

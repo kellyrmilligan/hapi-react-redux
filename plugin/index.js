@@ -64,7 +64,7 @@ function hapiReactReduxPlugin(server, options, next) {
       } else if (redirect) {
         _this.redirect(redirect.pathname + redirect.search).code(301);
       } else if (props) {
-        (0, _routeResolver2.default)(props, false, { dispatch: store.dispatch }).then(function () {
+        (0, _routeResolver2.default)(props, false, { dispatch: store.dispatch, getState: store.getState }).then(function () {
           var rootHtml = null;
           var layout = null;
           try {
