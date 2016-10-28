@@ -119,34 +119,24 @@ an example layout file is in the fixtures folder under src.
 Server rendering with React Router 2 requires the use of a component `RouterContext`. In order to pass props into this component, there are several methods built into react to do this. This plugin has a light Component that wraps `RouterContext`, `UniversalProvider`.
 
 ```js
-<UniversalProvider pre={pre} serverContext={context} config={config} store={store} >
+<Provider store={store} >
   <RouterContext {...props} />
-</UniversalProvider>
+</Provider>
 ```
 
-is passes config, and data coming from pre route handlers, and any extra context data that may have come from your handler.
+Provider here is the react-redux provider component
 
 In your `App.js` file, an example to handle this would be something like:
 
 ```js
 import React, { Component } from 'react'
-import { Provider } from 'react-redux'
 import TodoApp from './TodoApp'
 
 export default class App extends Component {
 
-  static contextTypes = {
-    config: React.PropTypes.object,
-    pre: React.PropTypes.object,
-    serverContext: React.PropTypes.object,
-    store: React.PropTypes.object,
-  }
-
   render() {
     return (
-      <Provider store={this.context.store} >
-        <TodoApp />
-      </Provider>
+      <TodoApp />
     )
   }
 }
@@ -159,7 +149,7 @@ Each component that needs data for a route needs to be in the RR handler hierarc
 
 ### Example
 ```js
-Component.fetch = function(params, query, store) {
+static fetch = function(params, query, { dispatch, getState }) {
   //a source method on an alt store returns a promise
   return store.dispatch(fetchTrunks())//dispatch an async action
 }

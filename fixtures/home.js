@@ -53,9 +53,9 @@ var Home = function (_Component) {
   }], [{
     key: 'fetch',
     value: function fetch(params, query, _ref) {
-      var store = _ref.store;
+      var dispatch = _ref.dispatch;
 
-      return store.dispatch((0, _actions.asyncAddTodo)('test-todo-redux'));
+      return dispatch((0, _actions.asyncAddTodo)('test-todo-redux'));
     }
   }]);
   return Home;
