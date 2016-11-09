@@ -19,11 +19,11 @@ var _Todo2 = _interopRequireDefault(_Todo);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var TodoList = function TodoList(_ref) {
-  var todos = _ref.todos;
-  var serverContext = _ref.serverContext;
-  var pre = _ref.pre;
-  var config = _ref.config;
-  var onTodoClick = _ref.onTodoClick;
+  var todos = _ref.todos,
+      serverContext = _ref.serverContext,
+      pre = _ref.pre,
+      config = _ref.config,
+      onTodoClick = _ref.onTodoClick;
   return _react2.default.createElement(
     'div',
     null,

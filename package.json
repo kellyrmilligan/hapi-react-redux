@@ -8,7 +8,7 @@
     "babel": "babel src -d . -D -s",
     "babel:watch": "babel src -d . -w -D -s",
     "clean": "rm -rf ./plugin && rm -rf ./fixtures",
-    "dev": "npm-run-all clean --parallel babel:watch lint:watch server:watch",
+    "dev": "npm-run-all clean --parallel babel:watch lint:watch",
     "lint": "esw --ext .js --fix --ignore-path .gitignore --color src/",
     "lint:watch": "esw --ext .js -w --fix --ignore-path .gitignore --color src/",
     "prepublish": "npm run build",
@@ -31,7 +31,7 @@
     ],
     "coverageDirectory": "coverage",
     "collectCoverage": true,
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.js$",
+    "testRegex": "(/__tests__/.*|\\.(test))\\.js$",
     "coverageThreshold": {
       "global": {
         "branches": 75,
@@ -47,26 +47,15 @@
     ]
   },
   "dependencies": {
+    "hoek": "^3.0.4"
+  },
+  "peerDependencies": {
     "boom": "^3.1.2",
-    "confidence": "^1.4.2",
-    "good": "^6.6.0",
-    "good-console": "^5.3.1",
     "hapi": "^13.0.0",
-    "hoek": "^3.0.4",
     "iso": "^5.1.0",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
-    "react-redux": "^4.4.5",
-    "react-router": "^2.0.0",
-    "redux": "^3.6.0",
-    "redux-thunk": "^2.1.0",
-    "route-resolver": "^2.0.0"
-  },
-  "peerDependencies": {
-    "hapi": "^13.0.0",
-    "react": "^15.3.0",
-    "react-dom": "^15.3.0",
-    "react-router": "^2.0.0",
+    "react-router": "^3.0.0",
     "react-redux": "^4.4.5",
     "redux": "^3.6.0",
     "route-resolver": "^2.0.0"
@@ -80,12 +69,22 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-trunkclub": "^3.0.4",
     "babel-runtime": "^6.11.6",
+    "boom": "^3.1.2",
     "cross-env": "^2.0.1",
     "eslint": "^2.13.1",
     "eslint-watch": "^2.1.13",
+    "hapi": "^13.0.0",
+    "iso": "^5.1.0",
     "jest": "^15.1.1",
     "nodemon": "^1.9.0",
     "npm-run-all": "^1.5.1",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "react-redux": "^4.4.5",
+    "react-router": "^3.0.0",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.1.0",
+    "route-resolver": "^2.0.0",
     "source-map-support": "^0.4.0"
   }
 }

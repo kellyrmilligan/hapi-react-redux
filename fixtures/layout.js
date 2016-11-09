@@ -38,9 +38,9 @@ var Layout = function (_Component) {
   (0, _createClass3.default)(Layout, [{
     key: "render",
     value: function render() {
-      var _props = this.props;
-      var assets = _props.assets;
-      var content = _props.content;
+      var _props = this.props,
+          assets = _props.assets,
+          content = _props.content;
 
 
       return _react2.default.createElement(

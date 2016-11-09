@@ -85,6 +85,8 @@ function hapiReactReduxPlugin(server, options, next) {
             return _this.response(_boom2.default.badImplementation('There was an error rendering the layout while rendring the route - ' + _this.request.raw.req.url, e));
           }
           _this.response('<!doctype html>\n' + layout);
+        }).catch(function (err) {
+          return _this.response(_boom2.default.wrap(err));
         });
       } else {
         // no errors, no redirect, we just didn't match anything

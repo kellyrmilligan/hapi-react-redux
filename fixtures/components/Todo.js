@@ -11,9 +11,9 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Todo = function Todo(_ref) {
-  var onClick = _ref.onClick;
-  var completed = _ref.completed;
-  var text = _ref.text;
+  var onClick = _ref.onClick,
+      completed = _ref.completed,
+      text = _ref.text;
   return _react2.default.createElement(
     'li',
     {
