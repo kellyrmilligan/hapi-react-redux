@@ -1,6 +1,6 @@
 {
   "name": "@trunkclub/hapi-react-redux",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Set of Hapi plugins for universal apps",
   "main": "plugin/index.js",
   "scripts": {
