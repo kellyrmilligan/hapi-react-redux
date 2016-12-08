@@ -5,10 +5,10 @@ import App from './App'
 import Home from './Home'
 
 const routes = (
-  <Route path="/" component={App}>
+  <Route path='/' component={App}>
     <IndexRoute component={Home} />
-    <Route path="info" component={Home} />
-    <Redirect from="about" to="info" />
+    <Route path='info' component={Home} />
+    <Redirect from='about' to='info' />
   </Route>
 )
 

@@ -1,3 +1,4 @@
+/* global describe, it, expect */
 import pre from '../pre'
 
 describe('pre reducer', () => {
@@ -6,7 +7,7 @@ describe('pre reducer', () => {
       device: { phone: true }
     }, {}))
     .toEqual({
-      device: { phone: true}
+      device: { phone: true }
     })
   })
 
@@ -23,5 +24,4 @@ describe('pre reducer', () => {
       device: { phone: true, iOS: false }
     })
   })
-
 })

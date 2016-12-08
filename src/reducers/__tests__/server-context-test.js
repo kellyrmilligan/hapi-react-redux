@@ -1,3 +1,4 @@
+/* global describe, it, expect */
 import serverContext from '../server-context'
 
 describe('server context reducer', () => {
@@ -45,5 +46,4 @@ describe('server context reducer', () => {
       }
     })
   })
-
 })

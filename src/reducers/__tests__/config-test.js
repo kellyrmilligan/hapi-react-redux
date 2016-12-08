@@ -1,3 +1,4 @@
+/* global describe, it, expect */
 import config from '../config'
 
 describe('config reducer', () => {
@@ -15,7 +16,7 @@ describe('config reducer', () => {
       newRelic: 123
     }, {
       payload: {
-        segment: 456,
+        segment: 456
       },
       type: 'SET_CONFIG'
     }))
@@ -24,5 +25,4 @@ describe('config reducer', () => {
       segment: 456
     })
   })
-
 })

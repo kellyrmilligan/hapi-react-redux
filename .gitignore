@@ -76,6 +76,6 @@ Temporary Items
 .vagrant/
 
 # Project specific
-/build
 /plugin
 /reducers
+/fixtures

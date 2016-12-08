@@ -5,7 +5,7 @@ import App from './app'
 
 class BadComponent extends React.Component {
 
-  render() {
+  render () {
     // return (
     //   <main>
     //     <h2>home</h2>
@@ -15,7 +15,7 @@ class BadComponent extends React.Component {
 }
 
 const routes = (
-  <Route path="/" component={App}>
+  <Route path='/' component={App}>
     <IndexRoute component={BadComponent} />
   </Route>
 )

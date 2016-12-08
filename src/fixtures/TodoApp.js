@@ -5,7 +5,7 @@ import VisibleTodoList from './containers/VisibleTodoList'
 
 export default class TodoApp extends Component {
 
-  render() {
+  render () {
     return (
       <div>
         <AddTodo />

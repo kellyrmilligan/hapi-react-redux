@@ -7,18 +7,18 @@ export default class Layout extends Component {
     content: PropTypes.string
   }
 
-  render() {
+  render () {
     const { assets, content } = this.props
 
     return (
-      <html lang="en-us">
+      <html lang='en-us'>
         <head>
           {Object.keys(assets.styles).map((style, key) =>
-            <link href={`${assets.styles[style]}`} key={key} rel="stylesheet" type="text/css" charSet="UTF-8"/>
+            <link href={`${assets.styles[style]}`} key={key} rel='stylesheet' type='text/css' charSet='UTF-8' />
           )}
         </head>
         <body>
-          <div id="react-root" dangerouslySetInnerHTML={{__html: content}}/>
+          <div id='react-root' dangerouslySetInnerHTML={{__html: content}} />
           {Object.keys(assets.scripts).map((script, key) =>
             <script src={assets.scripts[script]} key={key} async />
           )}

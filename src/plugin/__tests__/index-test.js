@@ -1,6 +1,7 @@
-'use strict'
+/* global describe, it, expect */
+/* eslint handle-callback-err: 0 */
 const Hapi = require('hapi')
-const createStore = require('fixtures/createStore')
+const configureStore = require('fixtures/configureStore')
 const clientRoutes = require('fixtures/routes')
 const badClientRoutes = require('fixtures/bad-routes')
 const redirectClientRoutes = require('fixtures/redirect-routes')
@@ -8,18 +9,18 @@ const layout = require('fixtures/layout')
 const badLayout = require('fixtures/bad-layout')
 
 const options = {
-  routes : clientRoutes,
-  layout : layout,
-  config : {
+  routes: clientRoutes,
+  layout: layout,
+  config: {
     honeybadger: '1234'
   },
-  assets : {
+  assets: {
     styles: {
     },
     scripts: {
     }
   },
-  createStore
+  configureStore
 }
 
 const HapiReactRedux = require('plugin/index')
@@ -46,7 +47,7 @@ describe('hapi react redux plugin', () => {
       server.route({
         method: 'GET',
         path: '/',
-        handler(request, reply) {
+        handler (request, reply) {
           return reply.hapiReactReduxRender()
         }
       })
@@ -70,7 +71,7 @@ describe('hapi react redux plugin', () => {
       server.route({
         method: 'GET',
         path: '/',
-        handler(request, reply) {
+        handler (request, reply) {
           return reply.hapiReactReduxRender()
         }
       })
@@ -138,7 +139,7 @@ describe('hapi react redux plugin', () => {
       server.route({
         method: 'GET',
         path: '/',
-        handler(request, reply) {
+        handler (request, reply) {
           return reply.hapiReactReduxRender({
             test: 'the test'
           })
@@ -169,7 +170,7 @@ describe('hapi react redux plugin', () => {
             { method: (request, reply) => { return reply('preTest') }, assign: 'preTest' }
           ]
         },
-        handler(request, reply) {
+        handler (request, reply) {
           return reply.hapiReactReduxRender()
         }
       })
@@ -193,7 +194,7 @@ describe('hapi react redux plugin', () => {
       server.route({
         method: 'GET',
         path: '/',
-        handler(request, reply) {
+        handler (request, reply) {
           return reply.hapiReactReduxRender()
         }
       })
@@ -217,7 +218,7 @@ describe('hapi react redux plugin', () => {
       server.route({
         method: 'GET',
         path: '/{path*}',
-        handler(request, reply) {
+        handler (request, reply) {
           return reply.hapiReactReduxRender()
         }
       })
@@ -241,7 +242,7 @@ describe('hapi react redux plugin', () => {
       server.route({
         method: 'GET',
         path: '/',
-        handler(request, reply) {
+        handler (request, reply) {
           return reply.hapiReactReduxRender()
         }
       })
@@ -265,7 +266,7 @@ describe('hapi react redux plugin', () => {
       server.route({
         method: 'GET',
         path: '/{path*}',
-        handler(request, reply) {
+        handler (request, reply) {
           return reply.hapiReactReduxRender()
         }
       })
@@ -289,7 +290,7 @@ describe('hapi react redux plugin', () => {
       server.route({
         method: 'GET',
         path: '/',
-        handler(request, reply) {
+        handler (request, reply) {
           return reply.hapiReactReduxRender()
         }
       })
@@ -302,5 +303,4 @@ describe('hapi react redux plugin', () => {
       })
     })
   })
-
 })

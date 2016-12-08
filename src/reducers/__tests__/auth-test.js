@@ -1,3 +1,4 @@
+/* global describe, it, expect */
 import auth from '../auth'
 
 describe('auth reducer', () => {
@@ -19,5 +20,4 @@ describe('auth reducer', () => {
       userId: 123
     })
   })
-
 })

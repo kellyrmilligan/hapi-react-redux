@@ -1,6 +1,8 @@
 {
   "presets": [
-    "trunkclub"
+    "latest",
+    "stage-2",
+    "react",
   ],
   "plugins": [
     "add-module-exports"

@@ -1,34 +1,24 @@
 hapi-react-redux
 =====================
-hapi plugin for supporting universal rendering on the server side.
-
-# Peer Dependencies
-```
-react": "^15.3.0"
-"react-dom": "^15.3.0"
-"react-router": "^2.0.0"
-"react-redux": "^4.4.5"
-"redux": "^3.6.0"
-"route-resolver": "^2.0.0"
-"hapi": "^13.0.0"
-```
+hapi plugin for supporting universal rendering on both server and client
 
 # Why?
 yes you could just write a module, import it, and re-use it in handlers and what not. but why not follow hapi's nice plugin architecture and make it easy?
 
 ## Usage
-hapi-react-redux tries to be un-opinionated where possible. In a few places for the sake of ease of use, a few constraints are in place for the top level component of your application. The patterns are modeled after the `vision` hapi plugin for rendering template views.
+hapi-react-redux tries to be un-opinionated where possible. In a few places for the sake of ease of use, a few constraints are in place for the top level component of your application. The pattern for the plugin itself is modeled after the wonderful [vision](https://github.com/hapijs/vision) module for rendering views.
 
 ## Register the plugin and configure it
 ```js
 import HapiReactRedux from 'hapi-react-redux'
+import configureStore from 'path/to/configure/store/function'
 const server = new Hapi.Server()
 server.connection()
 server.register(HapiReactRedux, (err) => {
   server.hapiReactRedux({
     routes : clientRoutes,//routes for react router
     layout : layout,//layout file, see more below
-    createStore: createStore,//should be a function that configures the redux store
+    configureStore,//should be a function that configures the redux store
     config : {//any app config you want passed to the client side app
       value: '1234'
     },
@@ -44,8 +34,48 @@ server.register(HapiReactRedux, (err) => {
 
 this registers the plugin, and configures it for use.
 
-## Create store
-This should be a function that returns your fully configured redux store. see example in `src/fixtures/createStore.js`
+## options
+
+### routes
+these are the routes for use in react router.
+
+```js
+import React from 'react'
+import { Route, IndexRoute } from 'react-router'
+
+import App from 'components/App'
+import Home from 'routes/home/index.js'
+import DetailPage from 'routes/detailPage/index.js'
+
+const routes = (
+  <Route path="/" component={App}>
+    <IndexRoute component={Home} />
+    <Route path='detail' component={DetailPage} />
+  </Route>
+)
+
+export default routes
+```
+
+this will allow you to set the routes in  `hapi-react-redux` and on your client-side entry point.
+
+## layout
+For server rendering to work, you need a layout file for other parts of the markup that are not directly rendered by react.
+
+`layout = renderToString(<Layout assets={assets} config={config} content={iso.render()} />)`
+
+the layout file is written in react, and is passed the data you configure in assets and config. the result of the react-router rendering is passed into the layout as content.
+
+see example that is used in tests in [src/fixtures/layout.js](https://github.com/kellyrmilligan/hapi-react-redux/blob/master/src/fixtures/layout)
+
+## configureStore
+This should be a function that returns your fully configured redux store. see example in [src/fixtures/configureStore.js](https://github.com/kellyrmilligan/hapi-react-redux/blob/master/src/fixtures/createStore.js)
+
+## assets
+this should have the paths to any javascript and css files you want on the page. these will end up as `props.assets` in your layout file, so structure it any way you want, but assets at the top level is required.
+
+## config
+this is any config you want to be made available to your client side app.
 
 ## Use the `reply.hapiReactReduxRender` method to respond to a request
 ```js
@@ -106,41 +136,6 @@ server.route({
 
 this will call the `reply.hapiReactReduxRender` for you in your controller mapped to that route.
 
-## Layout file
-For server rendering to work, you need a layout file for other parts of the markup that are not directly rendered by react.
-
-`layout = renderToString(<Layout assets={assets} config={config} content={iso.render()} />)`
-
-the layout file is written in react, and is passed the data you configure in assets and config. the result of the react-router rendering is passed into the layout as content.
-
-an example layout file is in the fixtures folder under src.
-
-## Top level component
-Server rendering with React Router 2 requires the use of a component `RouterContext`. In order to pass props into this component, there are several methods built into react to do this. This plugin has a light Component that wraps `RouterContext`, `UniversalProvider`.
-
-```js
-<Provider store={store} >
-  <RouterContext {...props} />
-</Provider>
-```
-
-Provider here is the react-redux provider component
-
-In your `App.js` file, an example to handle this would be something like:
-
-```js
-import React, { Component } from 'react'
-import TodoApp from './TodoApp'
-
-export default class App extends Component {
-
-  render() {
-    return (
-      <TodoApp />
-    )
-  }
-}
-```
 
 ## Fetching for routes on the server and the client
 Another constraint that this plugin imposes is the high level way that requests for data are made for routes.
@@ -154,6 +149,8 @@ static fetch = function(params, query, { dispatch, getState }) {
   return store.dispatch(fetchTrunks())//dispatch an async action
 }
 ```
+
+The [reactRouterFetch](https://github.com/kellyrmilligan/react-router-fetch) module is used to call the static methods on the matched route handlers. it will call the fetch method with the react router params(path params), the query(`?id=whatever`), and the redux `dispatch` and `getState` methods.
 
 ## Reducers
 This library provides a set of reducers to add to your store configuration to facilitate the server rendering process to add it's data to the redux store.
@@ -174,11 +171,76 @@ If there is a case where you want to send some data in a response directly from 
 The reducers and action creators included with this module try to adhere to flux standard actions spec
 https://github.com/acdlite/flux-standard-action
 
-For more reading, see:
-https://github.com/ReactTraining/react-router/issues/3183
-
-if you want to pass the context as props, see this example:
-https://github.com/ReactTraining/react-router/blob/master/examples/passing-props-to-children/app.js
-
 ## client side entry point
-explain the symmetry between the two things
+To accomplish universal rendering, there needs to be a symmetry between how the server renders the app and how the client renders the app. to do this, a few things are needed.
+
+- embed the data from the server request into the rendered response, so that the app can pick up the preloaded state and use it.
+- go through the same rendering process as the server as far as `react` is concerned.
+- fetch data when transitioning from route to route.
+
+```js
+import Iso from 'iso'
+import { applyRouterMiddleware, Router, browserHistory, match } from 'react-router'
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import routes from 'routes/client-routes'
+import configureStore from 'store/configure-store'
+
+Iso.bootstrap(function (bootstrapState, node) {
+  const { pathname, search, hash } = window.location
+  const location = `${pathname}${search}${hash}`
+  const store = configureStore(bootstrapState.preloadedState)
+
+  match({ routes, location }, (error, redirectLocation, renderProps) => {
+    render(
+      <Provider store={store}>
+        <Router routes={routes} history={browserHistory} />
+      </Provider>,
+      document.getElementById('react-root'),
+      () => {}
+    )
+  })
+})
+
+```
+
+This example is using the same routes as before. it gets the data that was embeded in the response, and bootstraps the redux store with it.
+
+## fetching data between route transitions on the client side
+There are multiple ways to accomplish this, and you may want to think about what your UX should be when the app is moving from page to page. [reactRouterFetch](https://github.com/kellyrmilligan/react-router-fetch) is used on the server after a `match` call to get the rendered props from react router, and call the fetch methods, etc. an example component that you can put in your root app component is [react-redux-transition-manager](https://github.com/kellyrmilligan/react-redux-transition-manager).  This sits between react router and your app, and uses react-router-fetch under the hood. it will call fetch, and only render the child routes after fetching has completed.  
+
+```js
+import React from 'react'
+import TransitionManager from 'react-redux-transition-manager'
+
+const ErrorThing = (props) => (
+  <div className="Error">Ooops! there was an error...</div>
+)
+
+const LoaderThing = (props) => (
+  <div className="Loader">loading...</div>
+)
+
+const App = (props) =>
+  <TransitionManager {...props}
+    onFetchStart={() => console.log('started fetching data for routes')}
+    onFetchEnd={() => console.log('finished fetching data for routes')}
+    onError={(err) => console.log('an error happened while fetching data for routes ', err)}
+    FetchingIndicator={<LoaderThing />}
+    ErrorIndicator={<ErrorThing />}
+  >
+    <div className="App">
+      {props.children}
+    </div>
+  </TransitionManager>
+
+export default App
+
+```
+
+is an example implementation of this.
+
+## TODO
+- example app in separate repo.
+- examples for client side of fetching data the same way.

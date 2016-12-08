@@ -21,7 +21,6 @@ export const toggleTodo = (id) => {
   }
 }
 
-
 export const asyncAddTodo = (text) => {
   return function (dispatch) {
     return new Promise((resolve, reject) => {
@@ -30,6 +29,5 @@ export const asyncAddTodo = (text) => {
         resolve()
       }, 100)
     })
-
   }
 }

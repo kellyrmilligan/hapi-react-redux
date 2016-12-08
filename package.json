@@ -4,13 +4,13 @@
   "description": "Set of Hapi plugins for universal apps",
   "main": "plugin/index.js",
   "scripts": {
-    "build": "npm-run-all clean lint babel",
+    "build": "npm-run-all clean standard babel",
     "babel": "babel src -d . -D -s",
     "babel:watch": "babel src -d . -w -D -s",
-    "clean": "rm -rf ./plugin && rm -rf ./fixtures",
-    "dev": "npm-run-all clean --parallel babel:watch lint:watch",
-    "lint": "esw --ext .js --fix --ignore-path .gitignore --color src/",
-    "lint:watch": "esw --ext .js -w --fix --ignore-path .gitignore --color src/",
+    "clean": "rimraf ./plugin ./fixtures",
+    "dev": "npm-run-all clean --parallel babel:watch standard:watch",
+    "standard": "standard --fix --verbose | snazzy",
+    "standard:watch": "onchange -i 'src/**/*.js' -- npm run standard",
     "prepublish": "npm run build",
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "npm run test -- --watch"
@@ -46,6 +46,9 @@
       "/script/"
     ]
   },
+  "standard": {
+    "parser": "babel-eslint"
+  },
   "dependencies": {
     "hoek": "^3.0.4"
   },
@@ -61,30 +64,35 @@
     "route-resolver": "^2.0.0"
   },
   "devDependencies": {
-    "@trunkclub/eslint-config": "^1.0.2",
     "babel-cli": "^6.11.4",
     "babel-core": "^6.6.4",
     "babel-eslint": "^6.1.2",
     "babel-jest": "^15.0.0",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-trunkclub": "^3.0.4",
+    "babel-preset-latest": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-2": "^6.18.0",
     "babel-runtime": "^6.11.6",
     "boom": "^4.2.0",
+    "coveralls": "^2.11.15",
     "cross-env": "^2.0.1",
-    "eslint": "^2.13.1",
-    "eslint-watch": "^2.1.13",
     "hapi": "^15.2.0",
     "iso": "^5.1.0",
     "jest": "^15.1.1",
     "nodemon": "^1.9.0",
     "npm-run-all": "^1.5.1",
+    "onchange": "^3.2.0",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
     "react-redux": "^4.4.5",
     "react-router": "^3.0.0",
+    "react-router-fetch": "^1.0.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
+    "rimraf": "^2.5.4",
     "route-resolver": "^2.0.0",
-    "source-map-support": "^0.4.0"
+    "snazzy": "^5.0.0",
+    "source-map-support": "^0.4.0",
+    "standard": "^8.6.0"
   }
 }
