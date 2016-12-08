@@ -169,7 +169,7 @@ Any configuration data your application needs is passed from the server to the c
 Hapi has a concept called route prerequisites. These are functions that execute before a route handler is invoked. To enable this data being available in your react app, a reducer is provided to add it to the store.
 
 ### Server Context
-If there is a case where you want to send some data in a response directly from the server, you can send this data to the render method provided. It will be added to the `serverContext` key of your store.
+If there is a case where you want to send some data in a response directly from the server, you can send this data to the render method provided. It will be added to the `serverContext` key of your store.  this is populated when you pass data directly from your server handler to the render method. 
 
 ## Flux standard actions
 The reducers and action creators included with this module try to adhere to flux standard actions spec
