@@ -1,6 +1,8 @@
 hapi-react-redux
 =====================
 hapi plugin for supporting universal rendering on both server and client
+[![Build Status](https://travis-ci.org/kellyrmilligan/hapi-react-redux.svg?branch=master)](https://travis-ci.org/kellyrmilligan/hapi-react-redux)
+
 
 # Why?
 yes you could just write a module, import it, and re-use it in handlers and what not. but why not follow hapi's nice plugin architecture and make it easy?

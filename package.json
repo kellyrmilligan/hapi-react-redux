@@ -13,7 +13,8 @@
     "standard:watch": "onchange -i 'src/**/*.js' -- npm run standard",
     "prepublish": "npm run build",
     "test": "cross-env NODE_ENV=test jest",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "test:coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "author": "Kelly Milligan",
   "license": "ISC",
