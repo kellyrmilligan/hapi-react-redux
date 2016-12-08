@@ -51,7 +51,7 @@
     "parser": "babel-eslint"
   },
   "dependencies": {
-    "hoek": "^3.0.4"
+    "hoek": "^4.1.0"
   },
   "peerDependencies": {
     "boom": "^4.2.0",
