@@ -1,6 +1,6 @@
 {
   "name": "hapi-react-redux",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Hapi rendering plugin for react and redux apps",
   "main": "plugin/index.js",
   "scripts": {
