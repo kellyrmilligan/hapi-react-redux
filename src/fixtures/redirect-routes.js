@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, IndexRoute, Redirect } from 'react-router'
 
-import App from './App'
+import App from './Root'
 import Home from './Home'
 
 const routes = (
