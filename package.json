@@ -1,7 +1,7 @@
 {
-  "name": "@trunkclub/hapi-react-redux",
-  "version": "1.4.0",
-  "description": "Set of Hapi plugins for universal apps",
+  "name": "hapi-react-redux",
+  "version": "1.0.0",
+  "description": "Hapi rendering plugin for react and redux apps",
   "main": "plugin/index.js",
   "scripts": {
     "build": "npm-run-all clean standard babel",
