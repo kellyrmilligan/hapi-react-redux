@@ -243,4 +243,4 @@ is an example implementation of this.
 
 ## TODO
 - example app in separate repo.
-- examples for client side of fetching data the same way.
+- document auth better
