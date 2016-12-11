@@ -1,7 +1,7 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { match, RouterContext } from 'react-router'
-import Iso from 'iso'
+import serialize from 'serialize-javascript'
 import Hoek from 'hoek'
 import reactRouterFetch from 'react-router-fetch'
 import Boom from 'boom'
@@ -26,15 +26,12 @@ function hapiReactReduxPlugin (server, options, next) {
     const Layout = realm.settings.layout
     const assets = realm.settings.assets
     const config = realm.settings.config
-    // TODO: where does this go now?
     const configureStore = realm.settings.configureStore
     // any extra data
     const pre = this.request.pre
     // is there a user?
     const auth = this.request.auth
-    const store = configureStore({ auth, pre, config, serverContext: context })
-
-    const iso = new Iso()
+    const store = configureStore({ auth, pre, config, serverContext: context }) // context is data from the route hander when calling the reply method
 
     match({ routes, location: this.request.raw.req.url }, (err, redirect, props) => {
       if (err) {
@@ -55,11 +52,10 @@ function hapiReactReduxPlugin (server, options, next) {
             } catch (err) {
               return this.response(Boom.badImplementation(`There was an error rendering the route - ${this.request.raw.req.url}`, err))
             }
-            iso.add(rootHtml, {
-              preloadedState: store.getState()
-            })
             try {
-              layout = renderToString(<Layout assets={assets} config={config} content={iso.render()} />)
+              layout = renderToString(
+                <Layout assets={assets} config={config} content={rootHtml} state={serialize(store.getState(), { isJSON: true })} />
+              )
             } catch (err) {
               return this.response(Boom.badImplementation(`There was an error rendering the layout while rendring the route - ${this.request.raw.req.url}`, err))
             }

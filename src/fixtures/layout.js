@@ -4,12 +4,13 @@ export default class Layout extends Component {
 
   static propTypes = {
     assets: PropTypes.object,
-    content: PropTypes.string
+    config: PropTypes.object,
+    content: PropTypes.string,
+    state: PropTypes.string
   }
 
   render () {
-    const { assets, content } = this.props
-
+    const { assets, content, state } = this.props
     return (
       <html lang='en-us'>
         <head>
@@ -19,6 +20,7 @@ export default class Layout extends Component {
         </head>
         <body>
           <div id='react-root' dangerouslySetInnerHTML={{__html: content}} />
+          <script type='application/json' dangerouslySetInnerHTML={{ __html: `window.__data=${state}` }} charSet='UTF-8' />
           {Object.keys(assets.scripts).map((script, key) =>
             <script src={assets.scripts[script]} key={key} async />
           )}
