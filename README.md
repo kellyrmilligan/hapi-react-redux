@@ -66,11 +66,55 @@ this will allow you to set the routes in  `hapi-react-redux` and on your client-
 ## layout
 For server rendering to work, you need a layout file for other parts of the markup that are not directly rendered by react.
 
-`layout = renderToString(<Layout assets={assets} config={config} content={iso.render()} />)`
+below is a sample layout from the tests:
 
-the layout file is written in react, and is passed the data you configure in assets and config. the result of the react-router rendering is passed into the layout as content.
+```js
+import React, {Component, PropTypes} from 'react'
 
-see example that is used in tests in [src/fixtures/layout.js](https://github.com/kellyrmilligan/hapi-react-redux/blob/master/src/fixtures/layout)
+export default class Layout extends Component {
+
+  static propTypes = {
+    assets: PropTypes.object,
+    config: PropTypes.object,
+    content: PropTypes.string,
+    state: PropTypes.string
+  }
+
+  render () {
+    const { assets, content, state } = this.props
+    return (
+      <html lang='en-us'>
+        <head>
+          {Object.keys(assets.styles).map((style, key) =>
+            <link href={`${assets.styles[style]}`} key={key} rel='stylesheet' type='text/css' charSet='UTF-8' />
+          )}
+        </head>
+        <body>
+          <div id='react-root' dangerouslySetInnerHTML={{__html: content}} />
+          <script dangerouslySetInnerHTML={{ __html: `window.__data=${state}` }} charSet='UTF-8' />
+          {Object.keys(assets.scripts).map((script, key) =>
+            <script src={assets.scripts[script]} key={key} async />
+          )}
+        </body>
+      </html>
+    )
+  }
+}
+```
+
+the layout file is written in react, and is passed the data you configure in assets and config. the result of the react-router rendering is passed into the layout as content. Lastly the state of the redux store for the request is stored in the `state` prop. it is up to you to make this available to your client side application. The data is serialized using the (serialize-javascript)[https://github.com/yahoo/serialize-javascript] module to protect against xss attacks.
+
+if you are utilizing content security policies and inline scripts are not allowed, you will have to embed the data a little differently:
+
+`<script type="application/json" id="initialState" dangerouslySetInnerHTML={{ __html: state }} charSet="UTF-8" />`
+
+The script type allows this to pass through CSP without any issues.
+
+Then in your client side entry point, instead of just accessing the data in the variable, you have to grab the script tag and parse it.
+
+```js
+const preloadedState = JSON.parse(document.getElementById('initialState').textContent)
+```
 
 ## configureStore
 This should be a function that returns your fully configured redux store. see example in [src/fixtures/configureStore.js](https://github.com/kellyrmilligan/hapi-react-redux/blob/master/src/fixtures/createStore.js)
@@ -110,7 +154,7 @@ server.register(HapiReactRedux, (err) => {
   })
 })
 ```
-The plugin decorates the reply server method, and adds the `hapiReactReduxRender` method to it. This will use the options configured for your application, such as routes from react router, etc. if you need to pass some additional data from the server in your controller, you can send an object to the method:
+The plugin decorates the `reply` server method, and adds the `hapiReactReduxRender` method to it. This will use the options configured for your application, such as routes from react router, etc. if you need to pass some additional data from the server in your controller, you can send an object to the method:
 
 ```js
 server.route({
@@ -127,6 +171,8 @@ server.route({
 })
 ```
 
+this data will be available in the serverContext section of your store.
+
 ## Use the server handler
 hapi also has server handlers, where you can assign a predefined handler to a route if you know it will be the same all the time.
 
@@ -138,10 +184,9 @@ server.route({
 })
 ```
 
-this will call the `reply.hapiReactReduxRender` for you in your controller mapped to that route.
+this will call the `reply.hapiReactReduxRender` for you in your controller mapped to that route. note that you will not be able to send any server context with this method.
 
-
-## Fetching for routes on the server and the client
+## Fetching data for routes on the server and the client
 Another constraint that this plugin imposes is the high level way that requests for data are made for routes.
 
 Each component that needs data for a route needs to be in the RR handler hierarchy and have a static fetch method that returns a promise that will be resolved when any requests are completed. Other than that, inside that method you can retrieve data any way that you like.
@@ -169,7 +214,7 @@ Any configuration data your application needs is passed from the server to the c
 Hapi has a concept called route prerequisites. These are functions that execute before a route handler is invoked. To enable this data being available in your react app, a reducer is provided to add it to the store.
 
 ### Server Context
-If there is a case where you want to send some data in a response directly from the server, you can send this data to the render method provided. It will be added to the `serverContext` key of your store.  this is populated when you pass data directly from your server handler to the render method. 
+If there is a case where you want to send some data in a response directly from the server, you can send this data to the render method provided. It will be added to the `serverContext` key of your store.  this is populated when you pass data directly from your server handler to the render method.
 
 ## Flux standard actions
 The reducers and action creators included with this module try to adhere to flux standard actions spec
@@ -183,7 +228,6 @@ To accomplish universal rendering, there needs to be a symmetry between how the 
 - fetch data when transitioning from route to route.
 
 ```js
-import Iso from 'iso'
 import { applyRouterMiddleware, Router, browserHistory, match } from 'react-router'
 import React from 'react'
 import { render } from 'react-dom'
@@ -191,25 +235,23 @@ import { Provider } from 'react-redux'
 import routes from 'routes/client-routes'
 import configureStore from 'store/configure-store'
 
-Iso.bootstrap(function (bootstrapState, node) {
-  const { pathname, search, hash } = window.location
-  const location = `${pathname}${search}${hash}`
-  const store = configureStore(bootstrapState.preloadedState)
+const { pathname, search, hash } = window.location
+const location = `${pathname}${search}${hash}`
+const store = configureStore(window.__data)
 
-  match({ routes, location }, (error, redirectLocation, renderProps) => {
-    render(
-      <Provider store={store}>
-        <Router routes={routes} history={browserHistory} />
-      </Provider>,
-      document.getElementById('react-root'),
-      () => {}
-    )
-  })
+match({ routes, location }, (error, redirectLocation, renderProps) => {
+  render(
+    <Provider store={store}>
+      <Router routes={routes} history={browserHistory} />
+    </Provider>,
+    document.getElementById('react-root'),
+    () => {}
+  )
 })
 
 ```
 
-This example is using the same routes as before. it gets the data that was embeded in the response, and bootstraps the redux store with it.
+This example is using the same routes as before. it gets the data that was embedded in the response(which in the sample layout file was made available via `window.data` variable), and bootstraps the redux store with it.
 
 ## fetching data between route transitions on the client side
 There are multiple ways to accomplish this, and you may want to think about what your UX should be when the app is moving from page to page. [reactRouterFetch](https://github.com/kellyrmilligan/react-router-fetch) is used on the server after a `match` call to get the rendered props from react router, and call the fetch methods, etc. an example component that you can put in your root app component is [react-redux-transition-manager](https://github.com/kellyrmilligan/react-redux-transition-manager).  This sits between react router and your app, and uses react-router-fetch under the hood. it will call fetch, and only render the child routes after fetching has completed.  
@@ -242,9 +284,7 @@ const App = (props) =>
 export default App
 
 ```
-
 is an example implementation of this.
 
 ## TODO
 - example app in separate repo.
-- document auth better
