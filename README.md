@@ -103,7 +103,7 @@ export default class Layout extends Component {
 }
 ```
 
-the layout file is written in react, and is passed the data you configure in assets and config. the result of the react-router rendering is passed into the layout as content. Lastly the state of the redux store for the request is stored in the `state` prop. it is up to you to make this available to your client side application. The data is serialized using the (serialize-javascript)[https://github.com/yahoo/serialize-javascript] module to protect against xss attacks.
+the layout file is written in react, and is passed the data you configure in assets and config. the result of the react-router rendering is passed into the layout as content. Lastly the state of the redux store for the request is stored in the `state` prop. it is up to you to make this available to your client side application. The data is serialized using the [serialize-javascript](https://github.com/yahoo/serialize-javascript) module to protect against xss attacks.
 
 if you are utilizing content security policies and inline scripts are not allowed, you will have to embed the data a little differently:
 
