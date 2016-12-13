@@ -5,6 +5,7 @@ hapi plugin for supporting universal rendering on both server and client
 [![Build Status](https://travis-ci.org/kellyrmilligan/hapi-react-redux.svg?branch=master)](https://travis-ci.org/kellyrmilligan/hapi-react-redux)
 [![Coverage Status](https://coveralls.io/repos/github/kellyrmilligan/hapi-react-redux/badge.svg?branch=master)](https://coveralls.io/github/kellyrmilligan/hapi-react-redux?branch=master)
 [![peerDependencies Status](https://david-dm.org/kellyrmilligan/hapi-react-redux/peer-status.svg)](https://david-dm.org/kellyrmilligan/hapi-react-redux?type=peer)
+[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 # Why?
 yes you could just write a module, import it, and re-use it in handlers and what not. but why not follow hapi's nice plugin architecture and make it easy?
