@@ -2,6 +2,7 @@
   "name": "hapi-react-redux",
   "version": "1.3.3",
   "description": "Hapi rendering plugin for react and redux apps",
+  "keywords": "react, redux, hapi, react-router, react-router-fetch",
   "main": "plugin/index.js",
   "repository": {
     "type": "git",
@@ -13,9 +14,9 @@
     "babel:watch": "babel src -d . -w -D -s",
     "clean": "rimraf ./plugin ./fixtures",
     "dev": "npm-run-all clean --parallel babel:watch standard:watch",
+    "prepublish": "npm run test && npm run build",
     "standard": "standard --fix --verbose | snazzy",
     "standard:watch": "onchange -i 'src/**/*.js' -- npm run standard",
-    "prepublish": "npm run test && npm run build",
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "npm run test -- --watch",
     "test:coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"

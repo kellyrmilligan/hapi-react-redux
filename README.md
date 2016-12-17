@@ -118,7 +118,22 @@ const preloadedState = JSON.parse(document.getElementById('initialState').textCo
 ```
 
 ## configureStore
-This should be a function that returns your fully configured redux store. see example in [src/fixtures/configureStore.js](https://github.com/kellyrmilligan/hapi-react-redux/blob/master/src/fixtures/createStore.js)
+This should be a function that returns your fully configured redux store. an example may look something like this:
+
+```js
+import rootReducer from 'reducers'
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+export default function (preloadedState) {
+  return createStore(
+    rootReducer,
+    preloadedState,
+    applyMiddleware(
+      thunk
+    )
+  )
+}
+```
 
 ## assets
 this should have the paths to any javascript and css files you want on the page. these will end up as `props.assets` in your layout file, so structure it any way you want, but assets at the top level is required.

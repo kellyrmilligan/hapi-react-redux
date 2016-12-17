@@ -107,7 +107,7 @@ describe('hapi react redux plugin', () => {
     })
   })
 
-  it('can collect data from fetch methods on route handlers to have in the rendered output via route-resolver', (done) => {
+  it('can collect data from fetch methods on route handlers to have in the rendered output via react-router-fetch', (done) => {
     const server = new Hapi.Server()
     server.connection()
     server.register(HapiReactRedux, (err) => {
