@@ -61,12 +61,12 @@
   },
   "peerDependencies": {
     "boom": "^4.2.0",
-    "hapi": "^15.2.0",
+    "hapi": "^16.0.1",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
     "react-router": "^3.0.0",
     "react-router-fetch": "^1.0.1",
-    "react-redux": "^4.4.5",
+    "react-redux": "^5.0.1",
     "redux": "^3.6.0"
   },
   "devDependencies": {
