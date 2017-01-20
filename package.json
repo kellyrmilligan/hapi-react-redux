@@ -9,12 +9,12 @@
     "url": "https://github.com/kellyrmilligan/hapi-react-redux.git"
   },
   "scripts": {
-    "build": "npm-run-all clean standard babel",
+    "build": "npm-run-all -l --silent clean standard babel",
     "babel": "babel src -d . -D -s",
     "babel:watch": "babel src -d . -w -D -s",
     "clean": "rimraf ./plugin ./fixtures",
-    "dev": "npm-run-all clean --parallel babel:watch standard:watch",
-    "prepublish": "npm run test && npm run build",
+    "dev": "npm-run-all -l --silent clean -p babel:watch standard:watch",
+    "prepublish": "npm-run-all -l --silent test build",
     "standard": "standard --fix --verbose | snazzy",
     "standard:watch": "onchange -i 'src/**/*.js' -- npm run standard",
     "test": "cross-env NODE_ENV=test jest",
