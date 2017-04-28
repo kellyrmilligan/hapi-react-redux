@@ -66,7 +66,7 @@ function hapiReactReduxPlugin (server, options, next) {
           })
       } else {
       // no errors, no redirect, we just didn't match anything
-        this.response(Boom.notFound(`Unable to find maching route for ${this.request.raw.req.url}`))
+        this.response(Boom.notFound(`Unable to find matching route for ${this.request.raw.req.url}`))
       }
     })
   })
