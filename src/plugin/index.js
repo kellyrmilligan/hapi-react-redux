@@ -1,9 +1,10 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import { match, RouterContext } from 'react-router'
+import { StaticRouter } from 'react-router-dom'
 import serialize from 'serialize-javascript'
 import Hoek from 'hoek'
 import reactRouterFetch from 'react-router-fetch'
+import { renderRoutes } from 'react-router-config'
 import Boom from 'boom'
 import { Provider } from 'react-redux'
 
@@ -33,42 +34,39 @@ function hapiReactReduxPlugin (server, options, next) {
     const auth = this.request.auth
     const store = configureStore({ auth, pre, config, serverContext: context }) // context is data from the route hander when calling the reply method
 
-    match({ routes, location: this.request.raw.req.url }, (err, redirect, props) => {
-      if (err) {
-        return this.response(Boom.badImplementation(`There was a react router error rendering the route - ${this.request.raw.req.url}`, err))
-      } else if (redirect) {
-        this.redirect(redirect.pathname + redirect.search).code(301)
-      } else if (props) {
-        reactRouterFetch(props, false, { dispatch: store.dispatch, getState: store.getState })
-          .then(() => {
-            let rootHtml = null
-            let layout = null
-            try {
-              rootHtml = renderToString(
-                <Provider store={store}>
-                  <RouterContext {...props} />
-                </Provider>
-              )
-            } catch (err) {
-              return this.response(Boom.badImplementation(`There was an error rendering the route - ${this.request.raw.req.url}`, err))
-            }
-            try {
-              layout = renderToString(
-                <Layout assets={assets} config={config} content={rootHtml} state={serialize(store.getState(), { isJSON: true })} />
-              )
-            } catch (err) {
-              return this.response(Boom.badImplementation(`There was an error rendering the layout while rendring the route - ${this.request.raw.req.url}`, err))
-            }
-            this.response(`<!doctype html>\n${layout}`)
-          })
-          .catch((err) => {
-            return this.response(Boom.wrap(err))
-          })
-      } else {
-      // no errors, no redirect, we just didn't match anything
-        this.response(Boom.notFound(`Unable to find matching route for ${this.request.raw.req.url}`))
-      }
-    })
+    // TODO: what do we do about querystring params?
+
+    reactRouterFetch(routes, { pathname: this.request.path,  }, { dispatch: store.dispatch, getState: store.getState })
+      .then((results) => {
+        const context = {}
+        let rootHtml = null
+        let layout = null
+        try {
+          rootHtml = renderToString(
+            <Provider store={store}>
+              <StaticRouter location={this.request.path} context={context}>
+                {renderRoutes(routes)}
+              </StaticRouter>
+            </Provider>
+          )
+        } catch (err) {
+          return this.response(Boom.badImplementation(`There was an error rendering the route - ${this.request.raw.req.url}`, err))
+        }
+        try {
+          layout = renderToString(
+            <Layout assets={assets} config={config} content={rootHtml} state={serialize(store.getState(), { isJSON: true })} />
+          )
+        } catch (err) {
+          return this.response(Boom.badImplementation(`There was an error rendering the layout while rendring the route - ${this.request.raw.req.url}`, err))
+        }
+        // this means a redirect component happened somewhere on this  path
+        if (context.url) {
+          return this.redirect(context.url).code(context.status || 301)
+        }
+        this.response(`<!doctype html>\n${layout}`)
+      })
+      .catch(err => this.response(Boom.wrap(err)))
+
   })
 
   server.handler('hapiReactReduxHandler', function (route, options) {

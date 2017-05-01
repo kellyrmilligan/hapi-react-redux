@@ -9,12 +9,12 @@
     "url": "https://github.com/kellyrmilligan/hapi-react-redux.git"
   },
   "scripts": {
-    "build": "npm-run-all -l --silent clean standard babel",
+    "build": "npm-run-all -l clean standard babel",
     "babel": "babel src -d . -D -s",
     "babel:watch": "babel src -d . -w -D -s",
     "clean": "rimraf ./plugin ./fixtures",
-    "dev": "npm-run-all -l --silent clean -p babel:watch standard:watch",
-    "prepublish": "npm-run-all -l --silent test build",
+    "dev": "npm-run-all -l clean -p babel:watch standard:watch",
+    "prepublish": "npm-run-all -l test build",
     "standard": "standard --fix --verbose | snazzy",
     "standard:watch": "onchange -i 'src/**/*.js' -- npm run standard",
     "test": "cross-env NODE_ENV=test jest",
@@ -24,7 +24,7 @@
   "author": "Kelly Milligan",
   "license": "ISC",
   "jest": {
-    "testPathDirs": [
+    "roots": [
       "src"
     ],
     "moduleDirectories": [
@@ -64,9 +64,10 @@
     "hapi": "^16.0.1",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
-    "react-router-fetch": "^2.0.0",
-    "react-router": "^4.0.0",
     "react-redux": "^5.0.1",
+    "react-router-config": "^1.0.0-beta.3",
+    "react-router-dom": "^4.1.1",
+    "react-router-fetch": "^2.0.0",
     "redux": "^3.6.0"
   },
   "devDependencies": {
@@ -87,11 +88,12 @@
     "nodemon": "^1.9.0",
     "npm-run-all": "^4.0.1",
     "onchange": "^3.2.0",
-    "react": "^15.3.0",
-    "react-dom": "^15.3.0",
+    "react": "^15.5.0",
+    "react-dom": "^15.5.0",
     "react-redux": "^5.0.1",
-    "react-router": "^3.0.0",
-    "react-router-fetch": "^1.0.1",
+    "react-router-config": "^1.0.0-beta.3",
+    "react-router-dom": "^4.1.1",
+    "react-router-fetch": "^2.0.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
     "rimraf": "^2.5.4",

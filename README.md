@@ -10,6 +10,9 @@ hapi plugin for supporting universal rendering on both server and client
 # Why?
 yes you could just write a module, import it, and re-use it in handlers and what not. but why not follow hapi's nice plugin architecture and make it easy?
 
+## TODO FOR NEW RELEASE
+what is up with querystring params? turn them into a string again for RR?
+
 ## Usage
 hapi-react-redux tries to be un-opinionated where possible. In a few places for the sake of ease of use, a few constraints are in place for the top level component of your application. The pattern for the plugin itself is modeled after the wonderful [vision](https://github.com/hapijs/vision) module for rendering views.
 
@@ -270,7 +273,7 @@ match({ routes, location }, (error, redirectLocation, renderProps) => {
 This example is using the same routes as before. it gets the data that was embedded in the response(which in the sample layout file was made available via `window.data` variable), and bootstraps the redux store with it.
 
 ## fetching data between route transitions on the client side
-There are multiple ways to accomplish this, and you may want to think about what your UX should be when the app is moving from page to page. [reactRouterFetch](https://github.com/kellyrmilligan/react-router-fetch) is used on the server after a `match` call to get the rendered props from react router, and call the fetch methods, etc. an example component that you can put in your root app component is [react-redux-transition-manager](https://github.com/kellyrmilligan/react-redux-transition-manager).  This sits between react router and your app, and uses react-router-fetch under the hood. it will call fetch, and only render the child routes after fetching has completed.  
+There are multiple ways to accomplish this, and you may want to think about what your UX should be when the app is moving from page to page. [reactRouterFetch](https://github.com/kellyrmilligan/react-router-fetch) is used on the server after a `match` call to get the rendered props from react router, and call the fetch methods, etc. an example component that you can put in your root app component is [react-redux-transition-manager](https://github.com/kellyrmilligan/react-redux-transition-manager).  This sits between react router and your app, and uses react-router-fetch under the hood. it will call fetch, and only render the child routes after fetching has completed.
 
 ```js
 import React from 'react'
