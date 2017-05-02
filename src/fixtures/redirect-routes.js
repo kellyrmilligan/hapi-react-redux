@@ -1,15 +1,32 @@
 import React from 'react'
-import { Route, IndexRoute, Redirect } from 'react-router'
-
 import App from './Root'
 import Home from './Home'
+import { Redirect, Route } from 'react-router-dom'
 
-const routes = (
-  <Route path='/' component={App}>
-    <IndexRoute component={Home} />
-    <Route path='info' component={Home} />
-    <Redirect from='about' to='info' />
-  </Route>
-)
+const RedirectHOC = (from, to, statusCode) => {
+ return ({ staticContext }) => {
+   staticContext.statusCode = statusCode
+   return <Redirect from={from} to={to} />
+ }
+}
+
+
+const routes = [
+  {
+    component: App,
+    routes: [
+      {
+        path: '/',
+        exact: true,
+        component: Home
+      },
+      {
+        path: '/redirectroute',
+        exact: true,
+        component: RedirectHOC('/redirectroute', '/redirectroutenew', 301)
+      },
+    ]
+  }
+]
 
 export default routes

@@ -17,7 +17,7 @@
     "prepublish": "npm-run-all -l test build",
     "standard": "standard --fix --verbose | snazzy",
     "standard:watch": "onchange -i 'src/**/*.js' -- npm run standard",
-    "test": "cross-env NODE_ENV=test jest",
+    "test": "jest",
     "test:watch": "npm run test -- --watch",
     "test:coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },

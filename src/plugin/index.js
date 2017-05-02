@@ -50,6 +50,7 @@ function hapiReactReduxPlugin (server, options, next) {
             </Provider>
           )
         } catch (err) {
+          console.log(err)
           return this.response(Boom.badImplementation(`There was an error rendering the route - ${this.request.raw.req.url}`, err))
         }
         try {
@@ -57,15 +58,19 @@ function hapiReactReduxPlugin (server, options, next) {
             <Layout assets={assets} config={config} content={rootHtml} state={serialize(store.getState(), { isJSON: true })} />
           )
         } catch (err) {
+          console.log(err)
           return this.response(Boom.badImplementation(`There was an error rendering the layout while rendring the route - ${this.request.raw.req.url}`, err))
         }
         // this means a redirect component happened somewhere on this  path
         if (context.url) {
-          return this.redirect(context.url).code(context.status || 301)
+          return this.redirect(context.url).code(context.statusCode || 301)
         }
-        this.response(`<!doctype html>\n${layout}`)
+        this.response(`<!doctype html>\n${layout}`).code(context.statusCode || 200)
       })
-      .catch(err => this.response(Boom.wrap(err)))
+      .catch((err) => {
+        console.log(err)
+        this.response(Boom.wrap(err))
+      })
 
   })
 

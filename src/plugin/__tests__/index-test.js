@@ -55,14 +55,13 @@ describe('hapi react redux plugin', () => {
         method: 'GET',
         url: '/'
       }, (res) => {
-        console.log(res.result)
         expect(res.result).toMatch(/home/)
         done()
       })
     })
   })
 
-  xit('can have a handler call the hapiReactReduxRender method on reply', (done) => {
+  it('can have a handler call the hapiReactReduxRender method on reply', (done) => {
     const server = new Hapi.Server()
     server.connection()
     server.register(HapiReactRedux, (err) => {
@@ -80,13 +79,13 @@ describe('hapi react redux plugin', () => {
         method: 'GET',
         url: '/'
       }, (res) => {
-        expect(res.result).toContain('home')
+        expect(res.result).toMatch(/home/)
         done()
       })
     })
   })
 
-  xit('can use the server handler instead of calling the method directly', (done) => {
+  it('can use the server handler instead of calling the method directly', (done) => {
     const server = new Hapi.Server()
     server.connection()
     server.register(HapiReactRedux, (err) => {
@@ -108,7 +107,7 @@ describe('hapi react redux plugin', () => {
     })
   })
 
-  xit('can collect data from fetch methods on route handlers to have in the rendered output via react-router-fetch', (done) => {
+  it('can collect data from fetch methods on route handlers to have in the rendered output via react-router-fetch', (done) => {
     const server = new Hapi.Server()
     server.connection()
     server.register(HapiReactRedux, (err) => {
@@ -124,13 +123,13 @@ describe('hapi react redux plugin', () => {
         method: 'GET',
         url: '/'
       }, (res) => {
-        expect(res.result).toContain('test-todo-redux')
+        expect(res.result).toMatch(/test-todo-redux/)
         done()
       })
     })
   })
 
-  xit('can use data sent to the hapiReactReduxRender method on reply', (done) => {
+  it('can use data sent to the hapiReactReduxRender method on reply', (done) => {
     const server = new Hapi.Server()
     server.connection()
     server.register(HapiReactRedux, (err) => {
@@ -150,13 +149,13 @@ describe('hapi react redux plugin', () => {
         method: 'GET',
         url: '/'
       }, (res) => {
-        expect(res.result).toContain('>the test</p>')
+        expect(res.result).toMatch(/the test/)
         done()
       })
     })
   })
 
-  xit('can use data from route prereqs', (done) => {
+  it('can use data from route prereqs', (done) => {
     const server = new Hapi.Server()
     server.connection()
     server.register(HapiReactRedux, (err) => {
@@ -179,13 +178,13 @@ describe('hapi react redux plugin', () => {
         method: 'GET',
         url: '/'
       }, (res) => {
-        expect(res.result).toContain('>preTest</p>')
+        expect(res.result).toMatch(/preTest/)
         done()
       })
     })
   })
 
-  xit('can use data from config', (done) => {
+  it('can use data from config', (done) => {
     const server = new Hapi.Server()
     server.connection()
     server.register(HapiReactRedux, (err) => {
@@ -203,13 +202,13 @@ describe('hapi react redux plugin', () => {
         method: 'GET',
         url: '/'
       }, (res) => {
-        expect(res.result).toContain('>1234</p>')
+        expect(res.result).toMatch(/1234/)
         done()
       })
     })
   })
 
-  xit('will redirect if RR has a redirect route in it', (done) => {
+  it('will redirect if RR has a redirect route in it', (done) => {
     const server = new Hapi.Server()
     server.connection()
     server.register(HapiReactRedux, (err) => {
@@ -225,7 +224,7 @@ describe('hapi react redux plugin', () => {
       })
       server.inject({
         method: 'GET',
-        url: '/about'
+        url: '/redirectroute'
       }, (res) => {
         expect(res.statusCode).toBe(301)
         done()
@@ -233,7 +232,7 @@ describe('hapi react redux plugin', () => {
     })
   })
 
-  xit('will throw error if layout/components are not valid', (done) => {
+  it('will throw error if layout/components are not valid', (done) => {
     const server = new Hapi.Server()
     server.connection()
     server.register(HapiReactRedux, (err) => {
@@ -257,7 +256,7 @@ describe('hapi react redux plugin', () => {
     })
   })
 
-  xit('will 404 if not found', (done) => {
+  it('will 404 if not found', (done) => {
     const server = new Hapi.Server()
     server.connection()
     server.register(HapiReactRedux, (err) => {
@@ -275,33 +274,11 @@ describe('hapi react redux plugin', () => {
         method: 'GET',
         url: '/notfound'
       }, (res) => {
+        expect(res.result).toMatch(/Not found/)
         expect(res.statusCode).toBe(404)
         done()
       })
     })
   })
 
-  xit('will throw error if react router throws an err', (done) => {
-    const server = new Hapi.Server()
-    server.connection()
-    server.register(HapiReactRedux, (err) => {
-      options.layout = layout
-      options.routes = badClientRoutes
-      server.hapiReactRedux(options)
-      server.route({
-        method: 'GET',
-        path: '/',
-        handler (request, reply) {
-          return reply.hapiReactReduxRender()
-        }
-      })
-      server.inject({
-        method: 'GET',
-        url: '/'
-      }, (res) => {
-        expect(res.statusCode).toBe(500)
-        done()
-      })
-    })
-  })
 })
