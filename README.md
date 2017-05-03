@@ -11,7 +11,6 @@ hapi plugin for supporting universal rendering on both server and client
 yes you could just write a module, import it, and re-use it in handlers and what not. but why not follow hapi's nice plugin architecture and make it easy?
 
 ## TODO FOR NEW RELEASE
-redirects and 404 pages?
 what is up with querystring params? turn them into a string again for RR?
 
 ## Usage

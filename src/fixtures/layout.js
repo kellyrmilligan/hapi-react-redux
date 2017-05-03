@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 
 export default class Layout extends Component {
-
   static propTypes = {
     assets: PropTypes.object,
     config: PropTypes.object,

@@ -3,7 +3,6 @@
 const Hapi = require('hapi')
 const configureStore = require('fixtures/configureStore')
 const clientRoutes = require('fixtures/routes')
-const badClientRoutes = require('fixtures/bad-routes')
 const redirectClientRoutes = require('fixtures/redirect-routes')
 const layout = require('fixtures/layout')
 const badLayout = require('fixtures/bad-layout')
@@ -53,7 +52,7 @@ describe('hapi react redux plugin', () => {
       })
       server.inject({
         method: 'GET',
-        url: '/'
+        url: '/?q=test'
       }, (res) => {
         expect(res.result).toMatch(/home/)
         done()
@@ -80,6 +79,30 @@ describe('hapi react redux plugin', () => {
         url: '/'
       }, (res) => {
         expect(res.result).toMatch(/home/)
+        done()
+      })
+    })
+  })
+
+  it('can build the location object to match react routers location with pathname and search', (done) => {
+    const server = new Hapi.Server()
+    server.connection()
+    server.register(HapiReactRedux, (err) => {
+      options.layout = layout
+      options.routes = clientRoutes
+      server.hapiReactRedux(options)
+      server.route({
+        method: 'GET',
+        path: '/search',
+        handler (request, reply) {
+          return reply.hapiReactReduxRender()
+        }
+      })
+      server.inject({
+        method: 'GET',
+        url: '/search?q=test'
+      }, (res) => {
+        expect(res.result).toMatch(/q=test/)
         done()
       })
     })
@@ -280,5 +303,4 @@ describe('hapi react redux plugin', () => {
       })
     })
   })
-
 })

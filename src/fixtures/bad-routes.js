@@ -4,7 +4,6 @@ import { Route, IndexRoute } from 'react-router'
 import App from './Root'
 
 class BadComponent extends React.Component {
-
   render () {
     // return (
     //   <main>

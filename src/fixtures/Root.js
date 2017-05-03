@@ -5,7 +5,6 @@ import { renderRoutes } from 'react-router-config'
 import TodoApp from './TodoApp'
 
 class App extends Component {
-
   render () {
     return (
       <div>

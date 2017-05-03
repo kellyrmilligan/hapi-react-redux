@@ -1,15 +1,14 @@
 import React from 'react'
 import App from './Root'
 import Home from './Home'
-import { Redirect, Route } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 const RedirectHOC = (from, to, statusCode) => {
- return ({ staticContext }) => {
-   staticContext.statusCode = statusCode
-   return <Redirect from={from} to={to} />
- }
+  return ({ staticContext }) => {
+    staticContext.statusCode = statusCode
+    return <Redirect from={from} to={to} />
+  }
 }
-
 
 const routes = [
   {
@@ -24,7 +23,7 @@ const routes = [
         path: '/redirectroute',
         exact: true,
         component: RedirectHOC('/redirectroute', '/redirectroutenew', 301)
-      },
+      }
     ]
   }
 ]

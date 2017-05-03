@@ -7,6 +7,7 @@ import reactRouterFetch from 'react-router-fetch'
 import { renderRoutes } from 'react-router-config'
 import Boom from 'boom'
 import { Provider } from 'react-redux'
+import queryString from 'query-string'
 
 function hapiReactReduxPlugin (server, options, next) {
   server.decorate('server', 'hapiReactRedux', function (options) {
@@ -34,9 +35,8 @@ function hapiReactReduxPlugin (server, options, next) {
     const auth = this.request.auth
     const store = configureStore({ auth, pre, config, serverContext: context }) // context is data from the route hander when calling the reply method
 
-    // TODO: what do we do about querystring params?
 
-    reactRouterFetch(routes, { pathname: this.request.path,  }, { dispatch: store.dispatch, getState: store.getState })
+    reactRouterFetch(routes, { pathname: this.request.path, search: queryString.stringify(this.request.query) }, { dispatch: store.dispatch, getState: store.getState })
       .then((results) => {
         const context = {}
         let rootHtml = null
@@ -50,7 +50,6 @@ function hapiReactReduxPlugin (server, options, next) {
             </Provider>
           )
         } catch (err) {
-          console.log(err)
           return this.response(Boom.badImplementation(`There was an error rendering the route - ${this.request.raw.req.url}`, err))
         }
         try {
@@ -58,7 +57,6 @@ function hapiReactReduxPlugin (server, options, next) {
             <Layout assets={assets} config={config} content={rootHtml} state={serialize(store.getState(), { isJSON: true })} />
           )
         } catch (err) {
-          console.log(err)
           return this.response(Boom.badImplementation(`There was an error rendering the layout while rendring the route - ${this.request.raw.req.url}`, err))
         }
         // this means a redirect component happened somewhere on this  path
@@ -68,10 +66,8 @@ function hapiReactReduxPlugin (server, options, next) {
         this.response(`<!doctype html>\n${layout}`).code(context.statusCode || 200)
       })
       .catch((err) => {
-        console.log(err)
         this.response(Boom.wrap(err))
       })
-
   })
 
   server.handler('hapiReactReduxHandler', function (route, options) {

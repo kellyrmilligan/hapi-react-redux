@@ -1,6 +1,7 @@
 import React from 'react'
 import App from './Root'
 import Home from './Home'
+import Search from './Search'
 
 const NotFound = ({ staticContext }) => {
   staticContext.statusCode = 404
@@ -15,6 +16,10 @@ const routes = [
         path: '/',
         exact: true,
         component: Home
+      },
+      {
+        path: '/search',
+        component: Search
       },
       {
         component: NotFound
