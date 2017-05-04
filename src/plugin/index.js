@@ -35,7 +35,6 @@ function hapiReactReduxPlugin (server, options, next) {
     const auth = this.request.auth
     const store = configureStore({ auth, pre, config, serverContext: context }) // context is data from the route hander when calling the reply method
 
-
     reactRouterFetch(routes, { pathname: decodeURI(this.request.path), search: queryString.stringify(this.request.query) }, { dispatch: store.dispatch, getState: store.getState })
       .then((results) => {
         const context = {}
