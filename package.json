@@ -83,7 +83,7 @@
     "coveralls": "^3.0.0",
     "cross-env": "^4.0.0",
     "hapi": "^16.0.1",
-    "jest": "^19.0.0",
+    "jest": "^20.0.0",
     "nodemon": "^1.9.0",
     "npm-run-all": "^4.0.1",
     "onchange": "^3.2.0",
