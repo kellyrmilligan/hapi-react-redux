@@ -40,9 +40,9 @@ server.register(HapiReactRedux, (err) => {
 
 this registers the plugin and configures it for use.
 
-## options
+## Options
 
-### routes
+### Routes
 These are the routes for use in react router that comply with the route shape found in [react-router-config](https://www.npmjs.com/package/react-router-config)
 
 ```js
@@ -81,7 +81,7 @@ export default routes
 
 this will allow you to set the routes in  `hapi-react-redux` and on your client-side entry point.
 
-## layout
+### Layout
 For server rendering to work, you need a layout file for other parts of the markup that are not directly rendered by react.
 
 below is a sample layout from the tests:

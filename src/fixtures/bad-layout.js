@@ -1,5 +1,6 @@
 /* eslint no-undef: 0 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class Layout extends Component {
   static propTypes = {
