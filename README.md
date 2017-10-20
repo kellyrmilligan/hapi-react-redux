@@ -22,7 +22,7 @@ const server = new Hapi.Server()
 server.connection()
 server.register(HapiReactRedux, (err) => {
   server.hapiReactRedux({
-    routes : clientRoutes, // routes for react-router-config
+    routes : clientRoutes, // routes for react-router-config, see examples below
     layout : layout, // layout file, see more below
     configureStore, // should be a function that configures the redux store
     config : { // any app config you want passed to the client side app, should be process.env values most likely :)
@@ -121,7 +121,7 @@ export default class Layout extends Component {
 
 ```
 
-the layout file is written in react, and is passed the data you configure in assets and config. the result of the react-router rendering is passed into the layout as content. Lastly the state of the redux store for the request is stored in the `state` prop. it is up to you to make this available to your client side application. The data is serialized using the [serialize-javascript](https://github.com/yahoo/serialize-javascript) module to protect against xss attacks.
+the layout file is written in react, and is passed the data you configure in assets and config. The result of the react-router rendering is passed into the layout as content. Lastly the state of the redux store for the request is stored in the `state` prop. It is up to you to make this available to your client side application. The data is serialized using the [serialize-javascript](https://github.com/yahoo/serialize-javascript) module to protect against xss attacks.
 
 if you are utilizing content security policies and inline scripts are not allowed, you will have to embed the data a little differently:
 
@@ -162,6 +162,7 @@ this should have the paths to any javascript and css files you want on the page.
 this is any config you want to be made available to your client side app.
 
 ## Use the `reply.hapiReactReduxRender` method to respond to a request
+
 ```js
 import HapiReactRedux from 'hapi-react-redux'
 const server = new Hapi.Server()
@@ -225,7 +226,7 @@ this will call the `reply.hapiReactReduxRender` for you in your controller mappe
 ## Fetching data for routes on the server and the client
 Another constraint that this plugin imposes is the high level way that requests for data are made for routes.
 
-Each component that needs data for a route needs to be in the RR handler hierarchy and have a static fetch method that returns a promise that will be resolved when any requests are completed. Other than that, inside that method you can retrieve data any way that you like.
+Each component that needs data for a route needs to be in the RR handler hierarchy and have a static fetch method that returns a promise. The returned promise will be resolved/rejected when any requests are completed. Other than that, inside that method you can retrieve data any way that you like.
 
 ### Example
 ```js
@@ -265,7 +266,7 @@ To accomplish universal rendering, there needs to be a symmetry between how the 
 
 ```js
 import React from 'react'
-import { render } from 'react-dom'
+import { hydrate } from 'react-dom'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { renderRoutes } from 'react-router-config'
@@ -275,7 +276,7 @@ import configureStore from 'store/configure-store'
 
 const store = configureStore(window.__data)
 
-render(
+hydrate(
   <Provider store={store}>
     <Router>
       {renderRoutes(routeConfig)}
@@ -294,5 +295,6 @@ There are multiple ways to accomplish this, and you may want to think about what
 
 You may choose to do something similar on your client-side app. The `react-router-fetch` repo has some sample code for this sort of component.
 
-## TODO
-- need to fully test this out in the example app repo
+## TODO/UPCOMING
+- fully featured sample app
+- better dev ux in sample app
