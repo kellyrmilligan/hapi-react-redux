@@ -64,7 +64,7 @@
   },
   "peerDependencies": {
     "boom": "^4.2.0",
-    "hapi": "^16.1.1",
+    "hapi": "^16.6.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
@@ -86,7 +86,7 @@
     "boom": "^4.2.0",
     "coveralls": "^2.11.15",
     "cross-env": "^5.1.0",
-    "hapi": "^16.1.1",
+    "hapi": "^16.6.2",
     "jest": "^19.0.0",
     "nodemon": "^1.9.0",
     "npm-run-all": "^4.0.1",
