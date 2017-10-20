@@ -1,6 +1,6 @@
 {
   "name": "hapi-react-redux",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Hapi rendering plugin for react and redux apps",
   "keywords": "react, redux, hapi, react-router, react-router-fetch",
   "main": "plugin/index.js",
