@@ -1,6 +1,6 @@
 {
   "name": "hapi-react-redux",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Hapi rendering plugin for react and redux apps",
   "keywords": "react, redux, hapi, react-router, react-router-fetch",
   "main": "plugin/index.js",
@@ -56,7 +56,7 @@
     "parser": "babel-eslint"
   },
   "dependencies": {
-    "hoek": "^4.1.0",
+    "hoek": "^5.0.1",
     "prop-types": "^15.6.0",
     "query-string": "^5.0.0",
     "serialize-javascript": "^1.3.0"
