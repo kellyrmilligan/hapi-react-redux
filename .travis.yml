@@ -1,8 +1,5 @@
 language: node_js
 node_js:
-  - "8.9.0"
-before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - export PATH="$HOME/.yarn/bin:$PATH"
+  - "8.10.0"
 after_success:
   - npm run test:coveralls
