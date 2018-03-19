@@ -36,7 +36,7 @@ async function hapiReactReduxPlugin (server, options, next) {
     const store = configureStore({ auth, pre, config, serverContext: context }) // context is data from the route hander when calling the reply method
 
     try {
-      const results = await reactRouterFetch(routes, {
+      await reactRouterFetch(routes, {
         pathname: decodeURI(this.request.path),
         search: queryString.stringify(this.request.query)
       }, {

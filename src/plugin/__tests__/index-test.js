@@ -32,7 +32,6 @@ describe('hapi react redux plugin', () => {
     expect(server).toBeTruthy()
     expect(server.hapiReactRedux).toBeTruthy()
     done()
-
   })
 
   it('can set options with the hapiReactRedux method', async (done) => {
@@ -273,12 +272,12 @@ describe('hapi react redux plugin', () => {
         return reply.hapiReactReduxRender()
       }
     })
-      const res = await server.inject({
-        method: 'GET',
-        url: '/notfound'
-      })
-      expect(res.result).toMatch(/Not found/)
-      expect(res.statusCode).toBe(404)
-      done()
+    const res = await server.inject({
+      method: 'GET',
+      url: '/notfound'
+    })
+    expect(res.result).toMatch(/Not found/)
+    expect(res.statusCode).toBe(404)
+    done()
   })
 })
