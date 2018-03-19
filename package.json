@@ -53,7 +53,10 @@
     ]
   },
   "standard": {
-    "parser": "babel-eslint"
+    "parser": "babel-eslint",
+    "ignore": [
+      "/src/fixtures/**/*.js"
+    ]
   },
   "dependencies": {
     "hoek": "^5.0.1",
