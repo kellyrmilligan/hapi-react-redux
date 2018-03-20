@@ -1,6 +1,6 @@
 {
   "name": "hapi-react-redux",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "Hapi rendering plugin for react and redux apps",
   "keywords": "react, redux, hapi, react-router, react-router-fetch",
   "main": "plugin/index.js",
@@ -53,17 +53,20 @@
     ]
   },
   "standard": {
-    "parser": "babel-eslint"
+    "parser": "babel-eslint",
+    "ignore": [
+      "/src/fixtures/**/*.js"
+    ]
   },
   "dependencies": {
     "hoek": "^5.0.1",
     "prop-types": "^15.6.0",
-    "query-string": "^5.0.0",
+    "query-string": "^6.0.0",
     "serialize-javascript": "^1.3.0"
   },
   "peerDependencies": {
     "boom": "^7.1.1",
-    "hapi": "^16.6.2",
+    "hapi": "^17.2.3",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
@@ -83,7 +86,7 @@
     "babel-preset-stage-2": "^6.18.0",
     "coveralls": "^3.0.0",
     "cross-env": "^5.1.0",
-    "hapi": "^16.6.2",
+    "hapi": "^17.2.3",
     "jest": "^22.0.0",
     "nodemon": "^1.9.0",
     "npm-run-all": "^4.0.1",
@@ -99,6 +102,6 @@
     "rimraf": "^2.5.4",
     "snazzy": "^7.0.0",
     "source-map-support": "^0.5.0",
-    "standard": "^10.0.3"
+    "standard": "^11.0.0"
   }
 }

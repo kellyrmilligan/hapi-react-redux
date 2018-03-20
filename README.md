@@ -7,6 +7,11 @@ hapi plugin for supporting universal rendering on both server and client
 [![peerDependencies Status](https://david-dm.org/kellyrmilligan/hapi-react-redux/peer-status.svg)](https://david-dm.org/kellyrmilligan/hapi-react-redux?type=peer)
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
+# Upgraded to be compatible with Hapi 17!
+The plugin has now been updated to be compatible with hapi 17!  if you are on an older version of hapi, stick with version `^2`
+
+Version `^3` is for hapi 17. 
+
 # Why?
 yes you could just write a module, import it, and re-use it in handlers and what not. but why not follow hapi's nice plugin architecture and make it easy?
 
@@ -19,23 +24,20 @@ hapi-react-redux tries to be un-opinionated where possible. In a few places for 
 import HapiReactRedux from 'hapi-react-redux'
 import configureStore from 'path/to/configure/store/function'
 const server = new Hapi.Server()
-server.connection()
-server.register(HapiReactRedux, (err) => {
-  server.hapiReactRedux({
-    routes : clientRoutes, // routes for react-router-config, see examples below
-    layout : layout, // layout file, see more below
-    configureStore, // should be a function that configures the redux store
-    config : { // any app config you want passed to the client side app, should be process.env values most likely :)
-      value: '1234'
+await server.register(HapiReactRedux)
+server.hapiReactRedux({
+  routes : clientRoutes, // routes for react-router-config, see examples below
+  layout : layout, // layout file, see more below
+  configureStore, // should be a function that configures the redux store
+  config : { // any app config you want passed to the client side app, should be process.env values most likely :)
+    value: '1234'
+  },
+  assets : { // any assets you want to use in your layout file, styles and scripts shown below are arbitrary
+    styles: {
     },
-    assets : { // any assets you want to use in your layout file, styles and scripts shown below are arbitrary
-      styles: {
-      },
-      scripts: {
-      }
+    scripts: {
     }
-  })
-})
+  }
 ```
 
 this registers the plugin and configures it for use.
@@ -161,45 +163,26 @@ this should have the paths to any javascript and css files you want on the page.
 ## config
 this is any config you want to be made available to your client side app.
 
-## Use the `reply.hapiReactReduxRender` method to respond to a request
-
-```js
-import HapiReactRedux from 'hapi-react-redux'
-const server = new Hapi.Server()
-server.connection()
-server.register(HapiReactRedux, (err) => {
-  server.hapiReactRedux({
-    routes : clientRoutes,//routes for react router
-    layout : layout,//layout file, see more below
-    createStore: createStore,//should be a function that configures the redux store
-    config : {//any app config you want passed to the client side app
-      value: '1234'
-    },
-    assets : {//any assets you want to use in your layout file, styles and scripts shown below are arbitrary
-      styles: {
-      },
-      scripts: {
-      }
-    }
-  })
-  server.route({
-    method: 'GET',
-    path: '/',
-    handler(request, reply) {
-      return reply.hapiReactReduxRender()
-    }
-  })
-})
-```
-The plugin decorates the `reply` server method, and adds the `hapiReactReduxRender` method to it. This will use the options configured for your application, such as routes from react router, etc. if you need to pass some additional data from the server in your controller, you can send an object to the method:
+## Use the `h.hapiReactReduxRender` method to respond to a request 
 
 ```js
 server.route({
   method: 'GET',
   path: '/',
-  handler(request, reply) {
-    //fetch some data
-    return reply.hapiReactReduxRender({
+  handler(request, h) {
+    return h.hapiReactReduxRender()
+  }
+})
+```
+The plugin decorates the `toolkit` with the `hapiReactReduxRender` method. This will use the options configured for your application, such as routes from react router, etc. if you need to pass some additional data from the server in your controller, you can send an object to the method:
+
+```js
+server.route({
+  method: 'GET',
+  path: '/',
+  handler(request, h) {
+    //fetch some data...
+    return h.hapiReactReduxRender({
       user: {
         name: 'Homer'//this will be available to your application as well. more on this in a bit
       }
@@ -221,7 +204,7 @@ server.route({
 })
 ```
 
-this will call the `reply.hapiReactReduxRender` for you in your controller mapped to that route. Note that you will not be able to send any server context with this method.
+this will call the `h.hapiReactReduxRender` for you in your controller mapped to that route. Note that you will not be able to send any server context with this method.
 
 ## Fetching data for routes on the server and the client
 Another constraint that this plugin imposes is the high level way that requests for data are made for routes.
@@ -231,8 +214,8 @@ Each component that needs data for a route needs to be in the RR handler hierarc
 ### Example
 ```js
 static fetch = function(match, location, { dispatch, getState }) {
-  //a source method on an alt store returns a promise
-  return store.dispatch(fetchTrunks())//dispatch an async action
+  // returns a promise
+  return store.dispatch(fetchData()) // dispatch an async action
 }
 ```
 
