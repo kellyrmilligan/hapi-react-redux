@@ -174,7 +174,7 @@ server.route({
   }
 })
 ```
-The plugin decorates the `toolkit` with the `hapiReactReduxRender` method. This will use the options configured for your application, such as routes from react router, etc. if you need to pass some additional data from the server in your controller, you can send an object to the method:
+The plugin decorates the [response toolkit](https://hapijs.com/api#response-toolkit) with the `hapiReactReduxRender` method. This will use the options configured for your application, such as routes from react router, etc. if you need to pass some additional data from the server in your controller, you can send an object to the method:
 
 ```js
 server.route({
