@@ -6,9 +6,9 @@ describe('config reducer', () => {
     expect(config({
       newRelic: 123
     }, {}))
-    .toEqual({
-      newRelic: 123
-    })
+      .toEqual({
+        newRelic: 123
+      })
   })
 
   it('will set a new value if the action is dispatched', () => {
@@ -20,9 +20,9 @@ describe('config reducer', () => {
       },
       type: 'SET_CONFIG'
     }))
-    .toEqual({
-      newRelic: 123,
-      segment: 456
-    })
+      .toEqual({
+        newRelic: 123,
+        segment: 456
+      })
   })
 })

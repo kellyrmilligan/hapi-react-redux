@@ -6,9 +6,9 @@ describe('pre reducer', () => {
     expect(pre({
       device: { phone: true }
     }, {}))
-    .toEqual({
-      device: { phone: true }
-    })
+      .toEqual({
+        device: { phone: true }
+      })
   })
 
   it('will set a new value if the action is dispatched', () => {
@@ -20,8 +20,8 @@ describe('pre reducer', () => {
       },
       type: 'SET_PRE'
     }))
-    .toEqual({
-      device: { phone: true, iOS: false }
-    })
+      .toEqual({
+        device: { phone: true, iOS: false }
+      })
   })
 })
