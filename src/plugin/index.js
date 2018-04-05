@@ -72,7 +72,7 @@ async function hapiReactReduxPlugin (server, options, next) {
       }
       return this.response(`<!doctype html>\n${layout}`).code(context.statusCode || 200)
     } catch (err) {
-      throw Boom.boomify(err)
+      throw Boom.boomify(err, { statusCode: 500 })
     }
   })
 
