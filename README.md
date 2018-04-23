@@ -279,7 +279,3 @@ There are multiple ways to accomplish this, and you may want to think about what
 - call fetch on any matched components to get the data
 
 You may choose to do something similar on your client-side app. The `react-router-fetch` repo has some sample code for this sort of component.
-
-## TODO/UPCOMING
-- fully featured sample app
-- better dev ux in sample app
