@@ -232,6 +232,8 @@ Hapi has an auth object that ends up being populated after a user has signed in.
 ### Config
 Any configuration data your application needs is passed from the server to the client. The provided reducer adds it to the redux store for your app to use.
 
+optionally, you can also set up your app to use config values from `process.env`. see the [hapi-react-redux-example](https://github.com/kellyrmilligan/hapi-react-redux-example) for examples. 
+
 ### Pre handlers
 Hapi has a concept called route prerequisites. These are functions that execute before a route handler is invoked. To enable this data being available in your react app, a reducer is provided to add it to the store.
 
