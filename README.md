@@ -15,6 +15,8 @@ Version `^3` is for hapi 17.
 # Why?
 yes you could just write a module, import it, and re-use it in handlers and what not. but why not follow hapi's nice plugin architecture and make it easy?
 
+## Example app
+you can find an example implementation using the event brite api at [hapi-react-redux-example](https://github.com/kellyrmilligan/hapi-react-redux-example). The app uses this plugin with hapi to render a 2 screen app to illustrate route fetching and some basic rednering. It uses webpack to compile both the client and server side files. There are many ways to do a universal js app, but this will get you started if need be. 
 
 ## Usage
 hapi-react-redux tries to be un-opinionated where possible. In a few places for the sake of ease of use, a few constraints are in place for the top level component of your application. The pattern for the plugin itself is modeled after the wonderful [vision](https://github.com/hapijs/vision) module for rendering views.
