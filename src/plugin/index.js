@@ -9,7 +9,7 @@ import Boom from 'boom'
 import { Provider } from 'react-redux'
 import queryString from 'query-string'
 
-async function hapiReactReduxPlugin (server, options, next) {
+async function hapiReactReduxPlugin (server, options) {
   server.decorate('server', 'hapiReactRedux', function (options) {
     Hoek.assert(options, 'Missing options')
     Hoek.assert(options.configureStore, 'Missing configure store option')
