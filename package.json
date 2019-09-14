@@ -106,6 +106,6 @@
     "rimraf": "^2.5.4",
     "snazzy": "^7.0.0",
     "source-map-support": "^0.5.0",
-    "standard": "^11.0.1"
+    "standard": "^14.3.0"
   }
 }
