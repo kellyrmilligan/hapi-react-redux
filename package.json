@@ -92,7 +92,7 @@
     "cross-env": "^5.1.0",
     "hapi": "^17.2.3",
     "jest": "^22.0.0",
-    "nodemon": "^1.9.0",
+    "nodemon": "^2.0.3",
     "npm-run-all": "^4.0.1",
     "onchange": "^3.2.0",
     "react": "^16.0.0",
